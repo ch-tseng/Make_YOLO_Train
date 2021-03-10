@@ -1,14 +1,14 @@
 import os,sys
 
 classList = { "forklift":0 }
-cfgFolder = "/WORK1/MyProjects/for_Sale/forklift/train_models/yolo_models/"
-dark_home = "~/frameworks/darknet.v4"
-yolov5_home = "~/frameworks/yolov5"
+cfgFolder = "/WORK1/MyProjects/for_Sale/forklift/train_models/yolo_models_auto/"
+dark_home = "/home/chtseng/frameworks/darknet.v4"
+yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
     'numBatch': 8,
     'numSubdivision': 4,
-    '416': "28, 57,  49,102,  87,143,  57,223,  92,300, 137,219, 135,356, 196,358, 292,394",
+    '416': "28, 58,  47,105,  81,130,  61,239, 109,204, 108,330, 165,252, 171,374, 280,395",
     '512': "35, 72,  59,137, 117, 99, 102,190,  82,318, 163,275, 134,421, 210,435, 340,477",
     '608': "40, 84,  72,142,  75,294, 128,209, 121,411, 201,322, 172,502, 258,521, 409,570",
     '640': "42, 89,  75,152,  83,326, 134,221, 138,449, 214,341, 204,546, 302,553, 449,606",
@@ -78,13 +78,13 @@ for cfg_name in cfgs:
         anch_list = anchors.split(',')
 
         anchors1, anchors2, anchors3 = "", "", ""
-        for a in range(0,3):
+        for a in range(0,6):
             anchors1 += anch_list[a]
             if a<2: anchors1 += ','
-        for a in range(3,6):
+        for a in range(6,12):
             anchors2 += anch_list[a]
             if a<5: anchors2 += ','
-        for a in range(6,9):
+        for a in range(12,18):
             anchors3 += anch_list[a]
             if a<8: anchors3 += ','
 
@@ -94,7 +94,7 @@ for cfg_name in cfgs:
         file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
         cfg_file = cfg_name + '.yaml'
 
-        exec_cmd = " cd {}\n python train.py --data {}  --cfg {} --batch {} --epochs 300 --weights {}".format( \
+        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --weights {}".format( \
             yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder,cfg_name+'.yaml'), \
             yolo_config["numBatch"],os.path.join(pwd,cfgs[cfg_name][1]))
 
@@ -119,7 +119,7 @@ for cfg_name in cfgs:
 
         cfg_file = cfg_name +'.cfg'
 
-        exec_cmd = "{}/darknet detector train \\\n    {} \\\n    {} \\\n    {} \\\n    -dont_show -mjpeg_port 8090 -gpus 0".format(\
+        exec_cmd = "{}/darknet detector train \\\n    {} \\\n    {} \\\n    {} \\\n    -dont_show \\\n    -mjpeg_port 8090 \\\n    -clear \\\n    -gpus 0".format(\
             dark_home, os.path.join(cfgFolder,'obj.data'), os.path.join(cfgFolder,cfg_name+'.cfg'), os.path.join(pwd,cfgs[cfg_name][1]))
 
     file = open(os.path.join(cfgFolder, cfg_file), "w")

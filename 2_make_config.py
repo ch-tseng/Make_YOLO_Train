@@ -28,7 +28,7 @@ for file in tqdm(os.listdir(saveYoloPath)):
     file_extension = file_extension.lower()
 
     if file_extension in ['.jpeg', '.jpg', '.png', '.bmp']:
-        if os.path.exists(filename + '.txt'):
+        if os.path.exists(os.path.join(saveYoloPath, filename + '.txt')):
             fileList.append(os.path.join(saveYoloPath, file))
 
 trainCount = len(fileList)

@@ -10,7 +10,8 @@ from tqdm import tqdm
 #--------------------------------------------------------------------
 xmlFolder = "/WORK1/MyProjects/for_Sale/forklift/dataset/labels"
 imgFolder = "/WORK1/MyProjects/for_Sale/forklift/dataset/images"
-negFolder = "/WORK1/MyProjects/for_Sale/forklift/dataset/negatives"
+negFolder = ""
+#negFolder = "/WORK1/MyProjects/for_Sale/forklift/dataset/negatives"
 saveYoloPath = "/WORK1/MyProjects/for_Sale/forklift/dataset/yolo/"
 classList = { "forklift":0 }
 
