@@ -12,6 +12,7 @@ yolo_config = {
     '512': "35, 72,  59,137, 117, 99, 102,190,  82,318, 163,275, 134,421, 210,435, 340,477",
     '608': "40, 84,  72,142,  75,294, 128,209, 121,411, 201,322, 172,502, 258,521, 409,570",
     '640': "42, 89,  75,152,  83,326, 134,221, 138,449, 214,341, 204,546, 302,553, 449,606",
+    '1536': "71,133, 101,239, 170,280, 148,446, 219,393, 114,966, 405,282, 201,683, 293,525, 297,834, 428,661, 257,1232, 404,956, 727,677, 404,1316, 560,1021, 566,1414, 770,1145, 832,1473, 1183,1472",
 }
 
 yolotiny_config = {
@@ -28,16 +29,18 @@ filterNum = (classNum + 5) * 3
 
 #default size:
 #    yolov3: 608, yolov3-tiny:416, yolov4:608, yolov4-tiny:416, yolo-fastest:320,
-#    yolo-fastest-xl:320, yolov4x-mish:640, yolov4-csp:512
+#    yolo-fastest-xl:320, yolov4x-mish:640, yolov4-csp:512, yolov4-cspx-p7:1536
 cfgs = {
     "yolov3": ["cfg/yolov3.cfg", "pretrained/darknet53.conv.74", 608],
     "yolov3-tiny": ["cfg/yolov3-tiny.cfg", "pretrained/yolov3-tiny.conv.15", 416],
+    "yolov3-spp": ["cfg/yolov3-spp.cfg", "pretrained/yolov3-spp.weights", 608],
     "yolov4": ["cfg/yolov4.cfg", "pretrained/yolov4.conv.137", 608],
     "yolov4-tiny": ["cfg/yolov4-tiny.cfg", "pretrained/yolov4-tiny.conv.29", 416],
     "yolo-fastest": ["cfg/yolo-fastest.cfg", "pretrained/yolo-fastest.weights", 320],
     "yolo-fastest-xl": ["cfg/yolo-fastest-xl.cfg", "pretrained/yolo-fastest-xl.weights", 320],
     "yolov4x-mish": ["cfg/yolov4x-mish.cfg", "pretrained/yolov4x-mish.conv.166", 640],
     "yolov4-csp": ["cfg/yolov4-csp.cfg", "pretrained/yolov4-csp.conv.142", 512],
+    "yolov4-cspx-p7": ["cfg/cspx-p7-mish.cfg", "pretrained/cspx-p7-mish_hp.344.conv", 1536],
     "yolov5s": ["cfg/yolov5s.yaml", "pretrained/yolov5s.pt", 640],
     "yolov5m": ["cfg/yolov5m.yaml", "pretrained/yolov5m.pt", 640],
     "yolov5l": ["cfg/yolov5l.yaml", "pretrained/yolov5l.pt", 640],
