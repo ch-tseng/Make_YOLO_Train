@@ -7,7 +7,7 @@ from tqdm import tqdm
 testRatio = 0.2
 classList = { "forklift":0 }
 saveYoloPath = "/WORK1/MyProjects/for_Sale/forklift/dataset/yolo"
-cfgFolder = "/WORK1/MyProjects/for_Sale/forklift/train_models/yolo_models/"
+cfgFolder = "/WORK1/MyProjects/for_Sale/forklift/train_models/yolo_models_auto/"
 darknet_home = "/home/chtseng/frameworks/darknet.v4/"
 #--------------------------------------------------------
 
@@ -27,8 +27,9 @@ for file in tqdm(os.listdir(saveYoloPath)):
     filename, file_extension = os.path.splitext(file)
     file_extension = file_extension.lower()
 
-    if(file_extension == ".txt"):
-        fileList.append(os.path.join(saveYoloPath, file))
+    if file_extension in ['.jpeg', '.jpg', '.png', '.bmp']:
+        if os.path.exists(filename + '.txt'):
+            fileList.append(os.path.join(saveYoloPath, file))
 
 trainCount = len(fileList)
 
