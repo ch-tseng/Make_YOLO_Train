@@ -1,25 +1,30 @@
 import os,sys
 
-classList = { "forklift":0 }
-cfgFolder = "/WORK1/MyProjects/for_Sale/forklift/train_models/yolo_models_auto/"
+cfgFolder = "/WORK1/MyProjects/for_Sale/Facial_detection/train_models/"
+classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
+              "face_with_mask":5, "face_with_mask_incorrect":6, "gas_mask":7, "goggles":8, "hair_net":9, "hat":10, \
+              "helmet":11, "hijab_niqab":12, "hood":13, "mask_colorful":14, "mask_surgical":15, "other":16, \
+              "scarf_bandana":17, "sunglasses":18, "turban":19 }
+
 dark_home = "/home/chtseng/frameworks/darknet.v4"
 yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
     'numBatch': 8,
     'numSubdivision': 4,
-    '416': "28, 58,  47,105,  81,130,  61,239, 109,204, 108,330, 165,252, 171,374, 280,395",
-    '512': "35, 72,  59,137, 117, 99, 102,190,  82,318, 163,275, 134,421, 210,435, 340,477",
-    '608': "40, 84,  72,142,  75,294, 128,209, 121,411, 201,322, 172,502, 258,521, 409,570",
-    '640': "42, 89,  75,152,  83,326, 134,221, 138,449, 214,341, 204,546, 302,553, 449,606",
-    '1536': "71,133, 101,239, 170,280, 148,446, 219,393, 114,966, 405,282, 201,683, 293,525, 297,834, 428,661, 257,1232, 404,956, 727,677, 404,1316, 560,1021, 566,1414, 770,1145, 832,1473, 1183,1472",
+    '416': "24, 26,  39, 57,  83, 60,  61,107,  98,165, 159,113, 154,261, 229,187, 270,333",
+    '512': "29, 31,  52, 65,  70,109,  96,169, 172,113, 144,236, 264,205, 211,345, 340,395",
+    '608': "34, 37,  62, 77,  84,130, 114,201, 208,137, 171,274, 320,250, 241,400, 406,480",
+    '640': "36, 39,  65, 80,  87,135, 121,211, 216,143, 180,298, 331,258, 268,432, 435,505",
+    '1536': "71, 62,  90,118, 115,194, 190,132, 156,283, 258,231, 209,397, 345,373, 541,252, \
+            278,545, 490,523, 375,713, 724,424, 493,928, 668,713, 974,616, 658,1133, 947,923, 878,1317, 1228,1332",
 }
 
 yolotiny_config = {
     'numBatch': 32,
     'numSubdivision': 2,
-    '320': "27, 53,  49,104,  59,213,  97,157, 109,264, 193,294",
-    '416': "35, 70,  64,137,  80,283, 126,203, 146,341, 255,386",
+    '320': "20, 23,  40, 53,  62, 99, 135, 92, 109,172, 194,229",
+    '416': "26, 30,  51, 68,  80,128, 177,120, 138,220, 248,294",
 }
 
 #---------------------------------------------------------------------
@@ -83,13 +88,13 @@ for cfg_name in cfgs:
         anchors1, anchors2, anchors3 = "", "", ""
         for a in range(0,6):
             anchors1 += anch_list[a]
-            if a<2: anchors1 += ','
+            if a<6: anchors1 += ','
         for a in range(6,12):
             anchors2 += anch_list[a]
-            if a<5: anchors2 += ','
+            if a<12: anchors2 += ','
         for a in range(12,18):
             anchors3 += anch_list[a]
-            if a<8: anchors3 += ','
+            if a<18: anchors3 += ','
 
         file_updated = file_content.replace("{CLASSES}", str(classNum))
         file_updated = file_updated.replace("{ANCHOR1}", str(anchors1))
