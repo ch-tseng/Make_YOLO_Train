@@ -8,12 +8,15 @@ from os.path import basename
 from tqdm import tqdm
 
 #--------------------------------------------------------------------
+#augmentation
 color2gry2rgb = True
-xmlFolder = "/WORK1/dataset/sale_crowndHuman/dataset_v20210324/labels"
-imgFolder = "/WORK1/dataset/sale_crowndHuman/dataset_v20210324/images"
+roate90 = False
+
+xmlFolder = "/WORK1/dataset/eden_crown_human_water/all/labels"
+imgFolder = "/WORK1/dataset/eden_crown_human_water/all/images"
 #negFolder = ""
-negFolder = "/WORK1/dataset/sale_crowndHuman/dataset_v20210324/negatives"
-saveYoloPath = "/WORK1/dataset/sale_crowndHuman/dataset_v20210324/yolo/"
+negFolder = "/WORK1/dataset/eden_crown_human_water/all/negatives"
+saveYoloPath = "/WORK1/dataset/eden_crown_human_water/all/yolo/"
 classList = { "person_vbox":0, "person_head":1 }
 
 #---------------------------------------------------------------------
@@ -33,6 +36,13 @@ def transferYolo( xmlFilepath, imgFilepath, newname=None):
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             gray_3channel = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
             cv2.imwrite( os.path.join(saveYoloPath ,'gray_'+img_filename+img_file_extension), gray_3channel)
+        if roate90 is True:
+            rotate1 = imutils.rotate(img, 90)
+            rotate2 = imutils.rotate(img, -90)
+            rotate3 = imutils.rotate(img, 180)
+            cv2.imwrite( os.path.join(saveYoloPath ,'r90_'+img_filename+img_file_extension), rotate1)
+            cv2.imwrite( os.path.join(saveYoloPath ,'r270_'+img_filename+img_file_extension), rotate2)
+            cv2.imwrite( os.path.join(saveYoloPath ,'r180_'+img_filename+img_file_extension), rotate3)
 
         imgShape = img.shape
         img_h = imgShape[0]
@@ -102,7 +112,7 @@ def transferYolo( xmlFilepath, imgFilepath, newname=None):
 
 #---------------------------------------------------------------
 fileCount = 0
-
+'''
 print("[Step 1/2] Transfrt all labeled images to yolo format.")
 for file in tqdm(os.listdir(imgFolder)):
     filename, file_extension = os.path.splitext(file)
@@ -122,7 +132,7 @@ for file in tqdm(os.listdir(imgFolder)):
             copyfile(imgfile, os.path.join(saveYoloPath ,file))
             #if color2gry2rgb is True:
             #    cv2.imwrite( os.path.join(saveYoloPath ,'gray_'+file), gray_3channel)
-
+'''
 print("[Step 2/2] Transfrt all negative images to yolo format.")
 nid = 0
 if(os.path.exists(negFolder)):
@@ -134,6 +144,16 @@ if(os.path.exists(negFolder)):
         if(file_extension == ".jpg" or file_extension==".png" or file_extension==".jpeg" or file_extension==".bmp"):
             nid += 1
             nfilename = 'neg_' + str(nid).zfill(6)
+
+            if color2gry2rgb is True:
+                img = cv2.imread(imgfile)
+                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                gray_3channel = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+                gray_file = os.path.join(saveYoloPath ,'gray_'+nfilename+file_extension)
+                cv2.imwrite( gray_file, gray_3channel)
+                transferYolo( None, gray_file, 'gray_' + nfilename)
+
             transferYolo( None, imgfile, nfilename)
             copyfile(imgfile, os.path.join(saveYoloPath ,nfilename + file_extension))
+
 
