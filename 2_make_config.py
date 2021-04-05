@@ -5,9 +5,9 @@ from tqdm import tqdm
 
 #---------------------------------------------------------
 testRatio = 0.2
-classList = { "forklift":0 }
-saveYoloPath = "/WORK1/MyProjects/for_Sale/forklift/dataset/yolo"
-cfgFolder = "/WORK1/MyProjects/for_Sale/forklift/train_models/yolo_models_auto/"
+classList = { "person_head":0, "person_vbox":1 }
+saveYoloPath = "/WORK1/dataset/crowd_human_water/try2/yolo/"
+cfgFolder = "/WORK1/dataset/crowd_human_water/try2/cfg_train"
 darknet_home = "/home/chtseng/frameworks/darknet.v4/"
 #--------------------------------------------------------
 

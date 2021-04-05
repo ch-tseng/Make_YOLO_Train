@@ -12,12 +12,12 @@ from tqdm import tqdm
 color2gry2rgb = True
 roate90 = False
 
-xmlFolder = "/WORK1/dataset/eden_crown_human_water/all/labels"
-imgFolder = "/WORK1/dataset/eden_crown_human_water/all/images"
+xmlFolder = "/WORK1/dataset/crowd_human_water/try2/aug_labels"
+imgFolder = "/WORK1/dataset/crowd_human_water/try2/aug_images"
 #negFolder = ""
-negFolder = "/WORK1/dataset/eden_crown_human_water/all/negatives"
-saveYoloPath = "/WORK1/dataset/eden_crown_human_water/all/yolo/"
-classList = { "person_vbox":0, "person_head":1 }
+negFolder = "/WORK1/dataset/crowd_human_water/try2/negatives"
+saveYoloPath = "/WORK1/dataset/crowd_human_water/try2/yolo/"
+classList = { "person_head":0, "person_vbox":1 }
 
 #---------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ def transferYolo( xmlFilepath, imgFilepath, newname=None):
 
 #---------------------------------------------------------------
 fileCount = 0
-'''
+
 print("[Step 1/2] Transfrt all labeled images to yolo format.")
 for file in tqdm(os.listdir(imgFolder)):
     filename, file_extension = os.path.splitext(file)
@@ -132,7 +132,7 @@ for file in tqdm(os.listdir(imgFolder)):
             copyfile(imgfile, os.path.join(saveYoloPath ,file))
             #if color2gry2rgb is True:
             #    cv2.imwrite( os.path.join(saveYoloPath ,'gray_'+file), gray_3channel)
-'''
+
 print("[Step 2/2] Transfrt all negative images to yolo format.")
 nid = 0
 if(os.path.exists(negFolder)):
