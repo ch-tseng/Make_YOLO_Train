@@ -2,6 +2,7 @@ import glob, os
 import os.path
 import time
 from shutil import copyfile
+import shutil
 import cv2
 from xml.dom import minidom
 from os.path import basename
@@ -9,15 +10,17 @@ from tqdm import tqdm
 
 #--------------------------------------------------------------------
 #augmentation
-color2gry2rgb = True
+color2gry2rgb = False
 roate90 = False
 
-xmlFolder = "/WORK1/dataset/crowd_human_water/try2/aug_labels"
-imgFolder = "/WORK1/dataset/crowd_human_water/try2/aug_images"
+xmlFolder = "/WORK1/dataset/crowd_human_water/v2/aug_labels"
+imgFolder = "/WORK1/dataset/crowd_human_water/v2/aug_images"
 #negFolder = ""
-negFolder = "/WORK1/dataset/crowd_human_water/try2/negatives"
-saveYoloPath = "/WORK1/dataset/crowd_human_water/try2/yolo/"
+negFolder = "/WORK1/dataset/crowd_human_water/v2/negatives"
+saveYoloPath = "/WORK1/dataset/crowd_human_water/v2/yolo/"
 classList = { "person_head":0, "person_vbox":1 }
+
+img_cp_type = 1  # 0--> copy, 1--> move
 
 #---------------------------------------------------------------------
 
@@ -129,7 +132,11 @@ for file in tqdm(os.listdir(imgFolder)):
             fileCount += 1
 
             transferYolo( xmlfile, imgfile)
-            copyfile(imgfile, os.path.join(saveYoloPath ,file))
+            if img_cp_type == 0:
+                copyfile(imgfile, os.path.join(saveYoloPath ,file))
+            else:
+                shutil.move(imgfile, os.path.join(saveYoloPath ,file))
+
             #if color2gry2rgb is True:
             #    cv2.imwrite( os.path.join(saveYoloPath ,'gray_'+file), gray_3channel)
 
@@ -154,6 +161,10 @@ if(os.path.exists(negFolder)):
                 transferYolo( None, gray_file, 'gray_' + nfilename)
 
             transferYolo( None, imgfile, nfilename)
-            copyfile(imgfile, os.path.join(saveYoloPath ,nfilename + file_extension))
+
+            if img_cp_type == 0:
+                copyfile(imgfile, os.path.join(saveYoloPath ,nfilename + file_extension))
+            else:
+                shutil.move(imgfile, os.path.join(saveYoloPath ,nfilename + file_extension))
 
 
