@@ -13,12 +13,12 @@ from tqdm import tqdm
 color2gry2rgb = False
 roate90 = False
 
-xmlFolder = "/WORK1/dataset/crowd_human_water/v2/aug_labels"
-imgFolder = "/WORK1/dataset/crowd_human_water/v2/aug_images"
+xmlFolder = "/WORKS/modelSale/FaceMask_Mine/aug_labels"
+imgFolder = "/WORKS/modelSale/FaceMask_Mine/aug_images"
 #negFolder = ""
-negFolder = "/WORK1/dataset/crowd_human_water/v2/negatives"
-saveYoloPath = "/WORK1/dataset/crowd_human_water/v2/yolo/"
-classList = { "person_head":0, "person_vbox":1 }
+negFolder = "/WORKS/modelSale/FaceMask_Mine/aug_negatives"
+saveYoloPath = "/WORKS/modelSale/FaceMask_Mine/yolo/"
+classList = { "bad":0, "good":1, "none":2 }
 
 img_cp_type = 1  # 0--> copy, 1--> move
 
@@ -51,7 +51,11 @@ def transferYolo( xmlFilepath, imgFilepath, newname=None):
         img_h = imgShape[0]
         img_w = imgShape[1]
 
-        labelXML = minidom.parse(xmlFilepath)
+        try:
+            labelXML = minidom.parse(xmlFilepath)
+        except:
+            return
+
         labelName = []
         labelXmin = []
         labelYmin = []
