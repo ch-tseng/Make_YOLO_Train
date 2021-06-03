@@ -7,7 +7,7 @@ sizes = [ [9,416], [9,512], [9,608], [9,640], [20,1536], [6,320], [6,416] ]
 
 
 darknet_path = os.path.join(dark_home, 'darknet')
-cmd_file = os.path.join(cfgFolder, 'train_cmd.txt')
+cmd_file = os.path.join(cfgFolder, 'anchors.txt')
 
 with open(cmd_file, 'w') as file:
     for i, size in enumerate(sizes):
