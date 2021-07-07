@@ -1,7 +1,7 @@
 import os,sys
 
-classList = { "forklift":0 }
-cfgFolder = "/WORKING/modelSale/forklift/cfg_train"
+classList = { "person_head":0, "person_vbox":1 }
+cfgFolder = "/WORKING/modelSale/crowd_human_sport/cfg_train"
 
 '''
 classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
@@ -9,24 +9,24 @@ classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_ot
               "helmet":11, "hijab_niqab":12, "hood":13, "mask_colorful":14, "mask_surgical":15, "other":16, \
               "scarf_bandana":17, "sunglasses":18, "turban":19 }
 '''
-dark_home = "/home/chtseng/frameworks/darknet.v4"
+dark_home = "/home/chtseng/frameworks/darknet"
 yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
     'numBatch': 120,
     'numSubdivision': 40,
-    '416': "7,  7,  12, 27,  27, 12,  53, 26,  26, 53,  97, 51,  52, 98, 147,145, 275,284",
-    '512': "9,  9,  33, 15,  15, 34,  65, 32,  32, 66, 120, 63,  64,121, 181,178, 338,350",
-    '608': "11, 10,  18, 40,  40, 18,  77, 38,  38, 78, 142, 75,  75,143, 215,211, 402,415",
-    '640': "11, 11,  42, 19,  19, 42,  81, 40,  40, 82, 150, 79,  80,151, 226,222, 422,437",
-    '1536': "17, 15,  23, 52,  57, 25,  43, 91, 102, 47,  79,125,  58,191, 146, 84, 216, 66, 109,205, 193,135, 334,131, 145,331, 345,223, 239,382, 635,273, 359,695, 717,481, 709,1299, 1334,771"
+    '416': "6,  7,   9, 23,  24, 10,  19, 53,  65, 22,  33,113, 142, 45,  68,196, 233,158",
+    '512': "7,  8,  12, 28,  30, 12,  23, 66,  80, 27,  41,140, 175, 56,  84,242, 287,195",
+    '608': "8, 10,  32, 13,  15, 36,  77, 27,  30, 91, 168, 50,  58,192, 299,111, 152,346",
+    '640': "9, 10,  15, 35,  38, 16,  29, 83, 101, 33,  51,175, 220, 70, 105,302, 359,245",
+    '1536': "16, 18,  21, 50,  51, 23,  39, 76,  99, 41,  34,150,  69,126, 191, 63,  60,274, 110,218, 244,127, 404, 85,  97,433, 212,364, 555,166, 153,626, 275,787, 799,304, 486,1029, 1104,683"
 }
 
 yolotiny_config = {
     'numBatch': 32,
     'numSubdivision': 2,
-    '320': "8,  8,  16, 33,  35, 17,  38, 73,  75, 39, 136,137",
-    '416': "10, 11,  42, 21,  22, 46,  93, 48,  52, 98, 179,175",
+    '320': "6,  6,  10, 27,  28, 11,  24, 80,  86, 26, 102,141",
+    '416': "7,  8,  13, 35,  36, 14,  32,104, 112, 34, 132,183",
 }
 
 #---------------------------------------------------------------------
@@ -106,7 +106,7 @@ for cfg_name in cfgs:
         file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
         cfg_file = cfg_name + '.yaml'
 
-        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --weights {}".format( \
+        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --noautoanchor    \\\n    --weights {}".format( \
             yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder,cfg_name+'.yaml'), \
             yolo_config["numBatch"],os.path.join(pwd,cfgs[cfg_name][1]))
 
