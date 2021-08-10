@@ -10,7 +10,7 @@ classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_ot
               "scarf_bandana":17, "sunglasses":18, "turban":19 }
 '''
 dark_home = "/home/chtseng/frameworks/darknet"
-yolofastest_home = "/home/chtseng/frameworks/Yolo-Fastest"
+yolofastest_home = "/home/chtseng/frameworks/darknet"
 yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
