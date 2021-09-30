@@ -1,8 +1,8 @@
 import os,sys
 
-classList = { "person_head":0, "person_vbox":1 }
+classList = { "D00":0, "D10":1, "D20":2, "D21":3, "D30":4, "D31":5, "D40":6, "D41":7, "D42":8, "D99":9 }
+cfgFolder = "/WORKING/Jackson_v2_road_defects/dataset/aug_0929/cfg_train"
 
-cfgFolder = "/WORKING/modelSale/crowd_human/cfg_train"
 '''
 classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
               "face_with_mask":5, "face_with_mask_incorrect":6, "gas_mask":7, "goggles":8, "hair_net":9, "hat":10, \
@@ -16,20 +16,20 @@ yolov5_home = "/home/chtseng/frameworks/yolov5"
 yolo_config = {
     'numBatch': 120,
     'numSubdivision': 40,
-    '416': "7,  5,   8, 20,  24,  9,  17, 48,  59, 19,  32,106, 125, 38,  73,194, 231,101",
-    '512': "9,  7,  28, 11,  12, 30,  62, 21,  25, 77, 129, 37,  56,174, 223, 76, 246,251",
-    '608': "10,  8,  33, 13,  14, 35,  75, 25,  30, 92, 154, 44,  67,207, 265, 90, 292,299",
-    '640': "12,  8,  12, 30,  38, 15,  25, 72,  92, 29,  49,162, 195, 59, 110,296, 357,158",
-    '768': "13, 10,  42, 16,  17, 45,  95, 32,  38,116, 195, 56,  84,262, 336,114, 369,378",
-    '960': "16, 13,  52, 20,  22, 55, 117, 39,  47,145, 242, 70, 105,327, 418,142, 460,471",
-    '1536': "19, 15,  47, 20,  21, 48,  68, 37, 125, 28,  37,102, 114, 58,  73,142, 228, 50,  58,260, 190, 97, 376, 84, 110,376, 304,184, 557,135, 186,597, 693,241, 364,825, 968,405, 1000,972"
+    '416': "22, 19,  32, 53,  64, 28,  78, 68,  46,125, 103,131, 194, 83, 138,217, 290,210",
+    '512': "26, 25,  67, 37,  36, 91,  82, 80, 190, 73,  98,146, 136,252, 217,165, 289,300",
+    '608': "32, 28,  46, 77,  93, 42, 113, 99,  68,183, 151,191, 283,121, 202,317, 424,307",
+    '640': "33, 29,  49, 81,  97, 44, 117,104,  71,194, 160,200, 292,122, 213,333, 448,317",
+    '960': "47, 45, 102, 74,  66,182, 262, 82, 155,169, 172,356, 306,240, 337,497, 708,397",
+    '1280': "57, 52, 127, 79,  73,161, 284,102, 163,181, 131,396, 259,272, 569,190, 275,545, 432,393, 482,717, 976,574",
+    '1536': "69, 72, 152,100, 137,235, 329,149, 181,511, 317,331, 732,354, 435,654, 835,863"
 }
 
 yolotiny_config = {
     'numBatch': 32,
     'numSubdivision': 2,
-    '320': "7,  5,  26,  9,   9, 26,  74, 22,  25, 82, 142, 89",
-    '416': "9,  7,  34, 12,  12, 34,  97, 29,  33,107, 185,115",
+    '320': "18, 18,  43, 30,  36, 77,  89, 56,  85,125, 169,161",
+    '416': "23, 23,  56, 39,  47,101, 116, 72, 110,161, 219,210",
 }
 
 #---------------------------------------------------------------------
@@ -55,6 +55,11 @@ cfgs = {
     "yolov5m": ["cfg/yolov5m.yaml", "pretrained/yolov5m.pt", 640],
     "yolov5l": ["cfg/yolov5l.yaml", "pretrained/yolov5l.pt", 640],
     "yolov5x": ["cfg/yolov5x.yaml", "pretrained/yolov5x.pt", 640],
+    "yolov5s-p6": ["cfg/yolov5s6.yaml", "pretrained/yolov5s6.pt", 1280],
+    "yolov5m-p6": ["cfg/yolov5m6.yaml", "pretrained/yolov5m6.pt", 1280],
+    "yolov5l-p6": ["cfg/yolov5l6.yaml", "pretrained/yolov5l6.pt", 1280],
+    "yolov5x-p6": ["cfg/yolov5x6.yaml", "pretrained/yolov5x6.pt", 1280],
+
 }
 
 pwd = os.getcwd()
@@ -93,7 +98,7 @@ for cfg_name in cfgs:
         anchors = yolo_config[str(cfgs[cfg_name][2])]
         anch_list = anchors.split(',')
 
-        anchors1, anchors2, anchors3 = "", "", ""
+        anchors1, anchors2, anchors3, anchors4 = "", "", "", ""
         for a in range(0,6):
             anchors1 += anch_list[a]
             if a<6: anchors1 += ','
@@ -103,11 +108,18 @@ for cfg_name in cfgs:
         for a in range(12,18):
             anchors3 += anch_list[a]
             if a<18: anchors3 += ','
+        if len(anch_list) > 18:
+            for a in range(18,24):
+                anchors4 += anch_list[a]
+                if a<24: anchors4 += ','
 
         file_updated = file_content.replace("{CLASSES}", str(classNum))
         file_updated = file_updated.replace("{ANCHOR1}", str(anchors1))
         file_updated = file_updated.replace("{ANCHOR2}", str(anchors2))
         file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
+        if len(anch_list) >= 18:
+            file_updated = file_updated.replace("{ANCHOR4}", str(anchors4))
+
         cfg_file = cfg_name + '.yaml'
 
         exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --noautoanchor    \\\n    --weights {}".format( \

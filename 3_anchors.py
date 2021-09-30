@@ -1,9 +1,9 @@
 import os, subprocess
 
-cfgFolder = "/WORKING/modelSale/forklift/cfg_train"
-dark_home = "/home/chtseng/frameworks/darknet.v4"
-sizes = [ [9,416], [9,512], [9,608], [9,640], [20,1536], [6,320], [6,416] ]
-#sizes = [ [9,608] ]
+cfgFolder = "/WORKING/Jackson_v2_road_defects/dataset/aug_0929/cfg_train"
+dark_home = "/home/chtseng/frameworks/darknet"
+sizes = [ [12,1280], [9,416], [9,512], [9,608], [9,640], [9,960], [9,1536], [6,320], [6,416] ]
+#sizes = [ [9,1536] ]
 
 
 darknet_path = os.path.join(dark_home, 'darknet')
