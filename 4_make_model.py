@@ -1,7 +1,8 @@
 import os,sys
 
-classList = { "D00":0, "D10":1, "D20":2, "D21":3, "D30":4, "D31":5, "D40":6, "D41":7, "D42":8, "D99":9 }
-cfgFolder = "/WORKING/Jackson_v2_road_defects/dataset/aug_0929/cfg_train"
+#classList = { "D00":0, "D10":1, "D20":2, "D21":3, "D30":4, "D31":5, "D40":6, "D41":7, "D42":8, "D99":9 }
+classList = { "D20":0, "D21":1 }
+cfgFolder = "/WORKING/ROAD_D20_D21/dataset/aug_1010/cfg_train"
 
 '''
 classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
@@ -14,22 +15,18 @@ yolofastest_home = "/home/chtseng/frameworks/darknet"
 yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
-    'numBatch': 120,
-    'numSubdivision': 40,
-    '416': "22, 19,  32, 53,  64, 28,  78, 68,  46,125, 103,131, 194, 83, 138,217, 290,210",
-    '512': "26, 25,  67, 37,  36, 91,  82, 80, 190, 73,  98,146, 136,252, 217,165, 289,300",
-    '608': "32, 28,  46, 77,  93, 42, 113, 99,  68,183, 151,191, 283,121, 202,317, 424,307",
-    '640': "33, 29,  49, 81,  97, 44, 117,104,  71,194, 160,200, 292,122, 213,333, 448,317",
-    '960': "47, 45, 102, 74,  66,182, 262, 82, 155,169, 172,356, 306,240, 337,497, 708,397",
-    '1280': "57, 52, 127, 79,  73,161, 284,102, 163,181, 131,396, 259,272, 569,190, 275,545, 432,393, 482,717, 976,574",
-    '1536': "69, 72, 152,100, 137,235, 329,149, 181,511, 317,331, 732,354, 435,654, 835,863"
+    '416': "22, 19,  32, 55,  62, 30,  74, 72,  48,134, 194, 65, 113,130, 141,222, 285,194",
+    '512': "27, 23,  40, 65,  79, 36,  97, 86,  57,157, 130,162, 262,103, 173,267, 351,271",
+    '608': "32, 28,  46, 81,  90, 43, 109,105,  70,197, 284, 95, 165,191, 208,326, 419,281",
+    '640': "26, 17,  46, 23,  45, 40,  77, 37,  77, 73, 125, 59, 146,104, 186,160, 298,204",
+    '960': "50, 44,  73,127, 142, 68, 171,165, 110,309, 448,149, 260,301, 326,513, 658,447",
+    '1280': "57, 52, 125, 79,  73,171, 278,104, 164,184, 139,410, 268,274, 664,184, 292,549, 450,394, 494,724, 980,593",
+    '1536': "81, 70, 119,203, 232,110, 283,262, 177,487, 413,486, 768,265, 527,817, 1079,757"
 }
 
 yolotiny_config = {
-    'numBatch': 32,
-    'numSubdivision': 2,
-    '320': "18, 18,  43, 30,  36, 77,  89, 56,  85,125, 169,161",
-    '416': "23, 23,  56, 39,  47,101, 116, 72, 110,161, 219,210",
+    '320': "15,  9,  27, 15,  41, 26,  63, 42,  85, 69, 139, 99",
+    '416': "19, 12,  35, 19,  53, 34,  82, 55, 110, 90, 181,128",
 }
 
 #---------------------------------------------------------------------
@@ -40,26 +37,26 @@ filterNum = (classNum + 5) * 3
 #default size:
 #    yolov3: 608, yolov3-tiny:416, yolov4:608, yolov4-tiny:416, yolo-fastest:320,
 #    yolo-fastest-xl:320, yolov4x-mish:640, yolov4-csp:512, yolov4-cspx-p7:1536
+#    [CFG FILE, PRE-TRAINED WEIGHTS, SIZE, BATCH, DIVISION-BATCH]
 cfgs = {
-    "yolov3": ["cfg/yolov3.cfg", "pretrained/darknet53.conv.74", 608],
-    "yolov3-tiny": ["cfg/yolov3-tiny.cfg", "pretrained/yolov3-tiny.conv.15", 416],
-    "yolov3-spp": ["cfg/yolov3-spp.cfg", "pretrained/yolov3-spp.weights", 608],
-    "yolov4": ["cfg/yolov4.cfg", "pretrained/yolov4.conv.137", 608],
-    "yolov4-tiny": ["cfg/yolov4-tiny.cfg", "pretrained/yolov4-tiny.conv.29", 416],
-    "yolo-fastest": ["cfg/yolo-fastest-1.1.cfg", "pretrained/yolo-fastest.conv.109", 320],
-    "yolo-fastest-xl": ["cfg/yolo-fastest-1.1-xl.cfg", "pretrained/yolo-fastest-xl.conv.109", 320],
-    "yolov4x-mish": ["cfg/yolov4x-mish.cfg", "pretrained/yolov4x-mish.conv.166", 640],
-    "yolov4-csp": ["cfg/yolov4-csp.cfg", "pretrained/yolov4-csp.conv.142", 512],
-    "yolov4-cspx-p7": ["cfg/cspx-p7-mish.cfg", "pretrained/cspx-p7-mish_hp.344.conv", 1536],
-    "yolov5s": ["cfg/yolov5s.yaml", "pretrained/yolov5s.pt", 640],
-    "yolov5m": ["cfg/yolov5m.yaml", "pretrained/yolov5m.pt", 640],
-    "yolov5l": ["cfg/yolov5l.yaml", "pretrained/yolov5l.pt", 640],
-    "yolov5x": ["cfg/yolov5x.yaml", "pretrained/yolov5x.pt", 640],
-    "yolov5s-p6": ["cfg/yolov5s6.yaml", "pretrained/yolov5s6.pt", 1280],
-    "yolov5m-p6": ["cfg/yolov5m6.yaml", "pretrained/yolov5m6.pt", 1280],
-    "yolov5l-p6": ["cfg/yolov5l6.yaml", "pretrained/yolov5l6.pt", 1280],
-    "yolov5x-p6": ["cfg/yolov5x6.yaml", "pretrained/yolov5x6.pt", 1280],
-
+    "yolov3": ["cfg/yolov3.cfg", "pretrained/darknet53.conv.74", 608, 64, 32],
+    "yolov3-tiny": ["cfg/yolov3-tiny.cfg", "pretrained/yolov3-tiny.conv.15", 416, 70, 2],
+    "yolov3-spp": ["cfg/yolov3-spp.cfg", "pretrained/yolov3-spp.weights", 608, 64, 32],
+    "yolov4": ["cfg/yolov4.cfg", "pretrained/yolov4.conv.137", 608, 64, 64],
+    "yolov4-tiny": ["cfg/yolov4-tiny.cfg", "pretrained/yolov4-tiny.conv.29", 416, 72, 1],
+    "yolo-fastest": ["cfg/yolo-fastest-1.1.cfg", "pretrained/yolo-fastest.conv.109", 320, 160, 2],
+    "yolo-fastest-xl": ["cfg/yolo-fastest-1.1-xl.cfg", "pretrained/yolo-fastest-xl.conv.109", 320, 120, 2],
+    "yolov4x-mish": ["cfg/yolov4x-mish.cfg", "pretrained/yolov4x-mish.conv.166", 640, 64, 64],
+    "yolov4-csp": ["cfg/yolov4-csp.cfg", "pretrained/yolov4-csp.conv.142", 512, 64, 64],
+    "yolov4-cspx-p7": ["cfg/cspx-p7-mish.cfg", "pretrained/cspx-p7-mish_hp.344.conv", 1536, 64, 64],
+    "yolov5s": ["cfg/yolov5s.yaml", "pretrained/yolov5s.pt", 640, 42, 1],
+    "yolov5m": ["cfg/yolov5m.yaml", "pretrained/yolov5m.pt", 640, 24, 1],
+    "yolov5l": ["cfg/yolov5l.yaml", "pretrained/yolov5l.pt", 640, 12, 1],
+    "yolov5x": ["cfg/yolov5x.yaml", "pretrained/yolov5x.pt", 640, 8, 1],
+    "yolov5s-p6": ["cfg/yolov5s6.yaml", "pretrained/yolov5s6.pt", 1280, 48, 1],
+    "yolov5m-p6": ["cfg/yolov5m6.yaml", "pretrained/yolov5m6.pt", 1280, 32, 1],
+    "yolov5l-p6": ["cfg/yolov5l6.yaml", "pretrained/yolov5l6.pt", 1280, 24, 1],
+    "yolov5x-p6": ["cfg/yolov5x6.yaml", "pretrained/yolov5x6.pt", 1280, 12, 1],
 }
 
 pwd = os.getcwd()
@@ -124,18 +121,17 @@ for cfg_name in cfgs:
 
         exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --noautoanchor    \\\n    --weights {}".format( \
             yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder,cfg_name+'.yaml'), \
-            yolo_config["numBatch"],os.path.join(pwd,cfgs[cfg_name][1]))
+            cfgs[cfg_name][3],os.path.join(pwd,cfgs[cfg_name][1]))
 
 
     else:
+        batch = cfgs[cfg_name][3]
+        div = cfgs[cfg_name][4]
+
         if(cfg_name in ["yolov3-tiny", "yolov4-tiny", "yolo-fastest", "yolo-fastest-xl"]):
-            batch = yolotiny_config['numBatch']
-            div = yolotiny_config['numSubdivision']
             anch = yolotiny_config[str(cfgs[cfg_name][2])]
 
         else:
-            batch = yolo_config['numBatch']
-            div = yolo_config['numSubdivision']
             anch = yolo_config[str(cfgs[cfg_name][2])]
 
         file_updated = file_content.replace("{BATCH}", str(batch))
