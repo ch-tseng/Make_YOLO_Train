@@ -1,8 +1,10 @@
 import os,sys
 
-#classList = { "D00":0, "D10":1, "D20":2, "D21":3, "D30":4, "D31":5, "D40":6, "D41":7, "D42":8, "D99":9 }
-classList = { "D20":0, "D21":1 }
-cfgFolder = "/WORKING/ROAD_D20_D21/dataset/aug_1010/cfg_train"
+classList = { "bicycle":0, "bus":1, "car":2, "container":3, "dump":4, "engineering":5, "hatchback":6,\
+              "minibus":7, "minibuss":8, "motorcycle":9, "plate":10, "rickshaw":11, "sedan":12, "tank":13,\
+              "taxi":14, "toycar":15, "trailer":16, "truck":17, "tutu":18 }
+
+cfgFolder = "/WORKING/modelSale/vehicles/dataset/aug_1014/cfg_train"
 
 '''
 classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
@@ -15,18 +17,18 @@ yolofastest_home = "/home/chtseng/frameworks/darknet"
 yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
-    '416': "22, 19,  32, 55,  62, 30,  74, 72,  48,134, 194, 65, 113,130, 141,222, 285,194",
-    '512': "27, 23,  40, 65,  79, 36,  97, 86,  57,157, 130,162, 262,103, 173,267, 351,271",
-    '608': "32, 28,  46, 81,  90, 43, 109,105,  70,197, 284, 95, 165,191, 208,326, 419,281",
-    '640': "26, 17,  46, 23,  45, 40,  77, 37,  77, 73, 125, 59, 146,104, 186,160, 298,204",
-    '960': "50, 44,  73,127, 142, 68, 171,165, 110,309, 448,149, 260,301, 326,513, 658,447",
-    '1280': "57, 52, 125, 79,  73,171, 278,104, 164,184, 139,410, 268,274, 664,184, 292,549, 450,394, 494,724, 980,593",
-    '1536': "81, 70, 119,203, 232,110, 283,262, 177,487, 413,486, 768,265, 527,817, 1079,757"
+    '416': "6,  6,  12, 16,  24, 28,  31, 51,  55, 58,  55,105,  96,122, 137,203, 257,308",
+    '512': "7,  7,  15, 20,  29, 34,  38, 63,  68, 71,  68,130, 119,151, 169,250, 316,379",
+    '608': "9,  9,  20, 23,  32, 47,  57, 64,  61,119, 107,114, 123,203, 208,283, 375,452",
+    '640': "9,  9,  19, 25,  36, 42,  47, 79,  85, 89,  85,162, 148,188, 211,312, 395,474",
+    '960': "14, 14,  31, 37,  51, 74,  89,102,  96,188, 170,179, 193,320, 328,447, 592,713",
+    '1280': "17, 15,  33, 39,  48, 78,  88, 64,  79,132, 149,139, 123,229, 232,248, 186,404, 347,445, 457,708, 826,962",
+    '1536': "22, 22,  50, 59,  81,119, 143,163, 154,300, 271,287, 309,512, 525,716, 947,1141"
 }
 
 yolotiny_config = {
-    '320': "15,  9,  27, 15,  41, 26,  63, 42,  85, 69, 139, 99",
-    '416': "19, 12,  35, 19,  53, 34,  82, 55, 110, 90, 181,128",
+    '320': "5,  6,  14, 17,  26, 35,  46, 66,  84,119, 175,220",
+    '416': "7,  8,  18, 22,  34, 46,  60, 86, 109,155, 227,286",
 }
 
 #---------------------------------------------------------------------
@@ -85,13 +87,11 @@ file.close
 tfile = open( os.path.join(cfgFolder, 'train_cmd.txt'), 'w')
 
 for cfg_name in cfgs:
-    print('test', cfg_name)
     with open(cfgs[cfg_name][0]) as file:
         file_content = file.read()
     file.close
 
     if(cfg_name[:6] == 'yolov5'):
-        print("TEST", str(cfgs[cfg_name][2]))
         anchors = yolo_config[str(cfgs[cfg_name][2])]
         anch_list = anchors.split(',')
 
@@ -119,8 +119,8 @@ for cfg_name in cfgs:
 
         cfg_file = cfg_name + '.yaml'
 
-        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --noautoanchor    \\\n    --weights {}".format( \
-            yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder,cfg_name+'.yaml'), \
+        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --noautoanchor    \\\n    --weights {}".format( \
+            yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder,cfg_name+'.yaml'), cfgs[cfg_name][2], \
             cfgs[cfg_name][3],os.path.join(pwd,cfgs[cfg_name][1]))
 
 
