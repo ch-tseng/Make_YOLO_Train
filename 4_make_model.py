@@ -1,10 +1,11 @@
 import os,sys
 
-classList = { "bicycle":0, "bus":1, "car":2, "container":3, "dump":4, "engineering":5, "hatchback":6,\
-              "minibus":7, "minibuss":8, "motorcycle":9, "plate":10, "rickshaw":11, "sedan":12, "tank":13,\
-              "taxi":14, "toycar":15, "trailer":16, "truck":17, "tutu":18 }
+classList = { "0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, \
+              "A":10, "B":11, "C":12, "D":13, "E":14, "F":15, "G":16 ,"H":17, "I":18, "J":19, \
+              "K":20, "L":21, "M":22, "N":23, "O":24, "P":25, "Q":26, "R":27, "S":28, "T":29, \
+              "U":30, "V":31, "W":32, "X":33, "Y":34, "Z":35, "plate":36 }
 
-cfgFolder = "/WORKING/modelSale/vehicles/dataset/aug_1014/cfg_train"
+cfgFolder = "/WORKING/modelSale/ritchie_plates_chars/dataset/aug_1020/cfg_train"
 
 '''
 classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
@@ -17,18 +18,18 @@ yolofastest_home = "/home/chtseng/frameworks/darknet"
 yolov5_home = "/home/chtseng/frameworks/yolov5"
 
 yolo_config = {
-    '416': "6,  6,  12, 16,  24, 28,  31, 51,  55, 58,  55,105,  96,122, 137,203, 257,308",
-    '512': "7,  7,  15, 20,  29, 34,  38, 63,  68, 71,  68,130, 119,151, 169,250, 316,379",
-    '608': "9,  9,  20, 23,  32, 47,  57, 64,  61,119, 107,114, 123,203, 208,283, 375,452",
-    '640': "9,  9,  19, 25,  36, 42,  47, 79,  85, 89,  85,162, 148,188, 211,312, 395,474",
-    '960': "14, 14,  31, 37,  51, 74,  89,102,  96,188, 170,179, 193,320, 328,447, 592,713",
-    '1280': "17, 15,  33, 39,  48, 78,  88, 64,  79,132, 149,139, 123,229, 232,248, 186,404, 347,445, 457,708, 826,962",
-    '1536': "22, 22,  50, 59,  81,119, 143,163, 154,300, 271,287, 309,512, 525,716, 947,1141"
+    '416': "6, 20,  11, 20,  10, 30,  16, 25,  15, 36,  27, 36,  64, 49, 101, 45, 110, 71",
+    '512': "8, 22,  11, 35,  15, 27,  17, 41,  24, 33,  28, 51,  78, 59, 124, 56, 135, 88",
+    '608': "10, 26,  13, 41,  18, 32,  20, 49,  29, 39,  34, 60,  92, 70, 147, 66, 160,104",
+    '640': "11, 29,  15, 44,  21, 34,  23, 52,  38, 54,  92, 79, 135, 56, 155, 85, 182,122",
+    '960': "15, 41,  20, 65,  29, 50,  31, 77,  46, 61,  53, 95, 146,111, 232,105, 253,165",
+    '1280': "16, 45,  22, 80,  35, 54,  32, 79,  37,103,  51, 78,  55,116,  93,115, 202,119, 217,184, 320,141, 371,225",
+    '1536': "24, 65,  33,104,  46, 80,  50,123,  73, 98,  85,152, 233,177, 371,168, 405,263"
 }
 
 yolotiny_config = {
-    '320': "5,  6,  14, 17,  26, 35,  46, 66,  84,119, 175,220",
-    '416': "7,  8,  18, 22,  34, 46,  60, 86, 109,155, 227,286",
+    '320': "6, 15,   8, 23,  12, 19,  15, 28,  52, 36,  84, 46",
+    '416': "8, 19,  10, 30,  15, 26,  20, 37,  68, 47, 110, 60",
 }
 
 #---------------------------------------------------------------------
@@ -51,14 +52,16 @@ cfgs = {
     "yolov4x-mish": ["cfg/yolov4x-mish.cfg", "pretrained/yolov4x-mish.conv.166", 640, 64, 64],
     "yolov4-csp": ["cfg/yolov4-csp.cfg", "pretrained/yolov4-csp.conv.142", 512, 64, 64],
     "yolov4-cspx-p7": ["cfg/cspx-p7-mish.cfg", "pretrained/cspx-p7-mish_hp.344.conv", 1536, 64, 64],
-    "yolov5s": ["cfg/yolov5s.yaml", "pretrained/yolov5s.pt", 640, 42, 1],
-    "yolov5m": ["cfg/yolov5m.yaml", "pretrained/yolov5m.pt", 640, 24, 1],
-    "yolov5l": ["cfg/yolov5l.yaml", "pretrained/yolov5l.pt", 640, 12, 1],
-    "yolov5x": ["cfg/yolov5x.yaml", "pretrained/yolov5x.pt", 640, 8, 1],
-    "yolov5s-p6": ["cfg/yolov5s6.yaml", "pretrained/yolov5s6.pt", 1280, 48, 1],
-    "yolov5m-p6": ["cfg/yolov5m6.yaml", "pretrained/yolov5m6.pt", 1280, 32, 1],
-    "yolov5l-p6": ["cfg/yolov5l6.yaml", "pretrained/yolov5l6.pt", 1280, 24, 1],
-    "yolov5x-p6": ["cfg/yolov5x6.yaml", "pretrained/yolov5x6.pt", 1280, 12, 1],
+    "yolov5n": ["cfg/yolov5n.yaml", "yolov5n.pt", 640, 128, 1],
+    "yolov5s": ["cfg/yolov5s.yaml", "yolov5s.pt", 640, 64, 1],
+    "yolov5m": ["cfg/yolov5m.yaml", "yolov5m.pt", 640, 24, 1],
+    "yolov5l": ["cfg/yolov5l.yaml", "yolov5l.pt", 640, 12, 1],
+    "yolov5x": ["cfg/yolov5x.yaml", "yolov5x.pt", 640, 8, 1],
+    "yolov5n-p6": ["cfg/yolov5n6.yaml", "yolov5n6.pt", 1280, 64, 1],
+    "yolov5s-p6": ["cfg/yolov5s6.yaml", "yolov5s6.pt", 1280, 48, 1],
+    "yolov5m-p6": ["cfg/yolov5m6.yaml", "yolov5m6.pt", 1280, 32, 1],
+    "yolov5l-p6": ["cfg/yolov5l6.yaml", "yolov5l6.pt", 1280, 24, 1],
+    "yolov5x-p6": ["cfg/yolov5x6.yaml", "yolov5x6.pt", 1280, 12, 1],
 }
 
 pwd = os.getcwd()
@@ -87,10 +90,6 @@ file.close
 tfile = open( os.path.join(cfgFolder, 'train_cmd.txt'), 'w')
 
 for cfg_name in cfgs:
-    with open(cfgs[cfg_name][0]) as file:
-        file_content = file.read()
-    file.close
-
     if(cfg_name[:6] == 'yolov5'):
         anchors = yolo_config[str(cfgs[cfg_name][2])]
         anch_list = anchors.split(',')
@@ -110,21 +109,25 @@ for cfg_name in cfgs:
                 anchors4 += anch_list[a]
                 if a<24: anchors4 += ','
 
-        file_updated = file_content.replace("{CLASSES}", str(classNum))
-        file_updated = file_updated.replace("{ANCHOR1}", str(anchors1))
-        file_updated = file_updated.replace("{ANCHOR2}", str(anchors2))
-        file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
-        if len(anch_list) >= 18:
-            file_updated = file_updated.replace("{ANCHOR4}", str(anchors4))
+        #file_updated = file_content.replace("{CLASSES}", str(classNum))
+        #file_updated = file_updated.replace("{ANCHOR1}", str(anchors1))
+        #file_updated = file_updated.replace("{ANCHOR2}", str(anchors2))
+        #file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
+        #if len(anch_list) >= 18:
+        #    file_updated = file_updated.replace("{ANCHOR4}", str(anchors4))
 
-        cfg_file = cfg_name + '.yaml'
+        #cfg_file = cfg_name + '.yaml'
 
-        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --cfg {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --noautoanchor    \\\n    --weights {}".format( \
-            yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder,cfg_name+'.yaml'), cfgs[cfg_name][2], \
-            cfgs[cfg_name][3],os.path.join(pwd,cfgs[cfg_name][1]))
+        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --weights {}".format( \
+            yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2], \
+            cfgs[cfg_name][3],cfgs[cfg_name][1])
 
 
     else:
+        with open(cfgs[cfg_name][0]) as file:
+            file_content = file.read()
+        file.close
+
         batch = cfgs[cfg_name][3]
         div = cfgs[cfg_name][4]
 
