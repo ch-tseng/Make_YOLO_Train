@@ -1,10 +1,8 @@
 import os, subprocess
 
-cfgFolder = "/WORKING/Jackson_v2_road_defects/dataset/aug_0929/cfg_train"
+cfgFolder = "/WORKING/WORKS/ROAD_Defects/dataset/aug_20211112/cfg_train"
 dark_home = "/home/chtseng/frameworks/darknet"
-sizes = [ [12,1280], [9,416], [9,512], [9,608], [9,640], [9,960], [9,1536], [6,320], [6,416] ]
-#sizes = [ [9,1536] ]
-
+sizes = [ [12,1536], [12,1280], [12,960], [12,640], [9,1280], [9,320], [9,416], [9,512], [9,608], [9,640], [9,960], [6,320], [6,416] ]
 
 darknet_path = os.path.join(dark_home, 'darknet')
 cmd_file = os.path.join(cfgFolder, 'anchors.txt')
