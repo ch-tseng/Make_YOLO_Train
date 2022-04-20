@@ -1,9 +1,13 @@
 import os,sys
 
-#classList = { "D00":0, "D10":1, "D20":2, "D21":3, "D30":4, "D31":5, "D40":6, "D41":7, "D42":8, "D99":9 }
-classList = { "0":0, "eye":1, "nose":2, "mouth":3, "face":4, "hface":5, "mface":6 }
-cfgFolder = "/WORKING/WORKS/mask_eyeball_face/aug_20211208/cfg_train"
+classList = { 'person_head':0, 'person_vbox':1 }
+cfgFolder = "/WORKING/modelSale/Crowd_human/dataset/aug_20220413/cfg_train"
+project_name = 'Crowd_human'
+
 '''
+classList = { 'D00':0, 'D10':1, 'D20':2, 'D21':3, 'D30':4 ,'D31':5, 'D40':6, 'D41':7, 'D42':8, 'D99':9 }
+cfgFolder = "/WORKING/WORKS/road_defects_2022_04/aug_20220408/cfg_train"
+
 classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_other_covering":3, "face_shield":4, \
               "face_with_mask":5, "face_with_mask_incorrect":6, "gas_mask":7, "goggles":8, "hair_net":9, "hat":10, \
               "helmet":11, "hijab_niqab":12, "hood":13, "mask_colorful":14, "mask_surgical":15, "other":16, \
@@ -15,32 +19,44 @@ yolov5_home = "/home/chtseng/frameworks/yolov5"
 yolor_home = "/home/chtseng/frameworks/yolor"
 
 cfgs = {
+     "yolov3": ["cfg/yolov3/yolov3.cfg", "pretrained/yolov3/darknet53.conv.74", '608_9', 64, 32, 3],
+     "yolov3-tiny": ["cfg/yolov3/yolov3-tiny.cfg", "pretrained/yolov3/yolov3-tiny.conv.15", '416_6', 70, 2, 3],
      "yolov4": ["cfg/yolov4/yolov4.cfg", "pretrained/yolov4/yolov4.conv.137", '608_9', 64, 64, 3],
+     "yolov4-tiny": ["cfg/yolov4/yolov4-tiny.cfg", "pretrained/yolov4/yolov4-tiny.conv.29", '416_6', 72, 1, 3],
+     "yolov4-p6": ["cfg/yolov4/yolov4-p6.cfg", 'pretrained/yolov4-p6.conv.289', '1280_12', 64, 64, 4],
+     "yolo-fastest": ["cfg/yolo-fastest/yolo-fastest-1.1.cfg", "pretrained/yolo-fastest/yolo-fastest.conv.109", '320_6', 160, 2, 3],
      "yolo-fastest-xl": ["cfg/yolo-fastest/yolo-fastest-1.1-xl.cfg", "pretrained/yolo-fastest/yolo-fastest-xl.conv.109", '320_6', 120, 2, 3],
+     "yolov5n": ["cfg/yolov5/yolov5n.yaml", "yolov5n.pt", '640_9', 64, 1, 3],
      "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', 64, 1, 3],
+     "yolov5m": ["cfg/yolov5/yolov5m.yaml", "yolov5m.pt", '640_9', 64, 1, 3],
+     "yolov5l": ["cfg/yolov5/yolov5l.yaml", "yolov5l.pt", '640_9', 64, 1, 3],
+     "yolov5x": ["cfg/yolov5/yolov5x.yaml", "yolov5x.pt", '640_9', 64, 1, 3],
+     "yolov5s-p6_1280": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', 64, 1, 4],
+     "yolov5x-p6_1280": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 48, 1, 4],
      "yolor_csp": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp.pt", "640_9", 64, 16, 3],
-     "yolor_csp_x_star": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x_star.pt", "640_9", 66, 33, 3],
-     "yolor_p6": ["cfg/yolor/yolor_p6.cfg", "pretrained/yolor/yolor_p6.pt", "1280_12", 66, 66, 3],
-     "yolor_w6":  ["cfg/yolor/yolor_w6.cfg", "pretrained/yolor/yolor_w6.pt", "1280_12", 66, 66, 3],
-     "yolor_yolov4_p6": ["cfg/yolor/yolor_p6.cfg", '', "640_12", 66, 66, 4],
-     "yolor_yolov4_p7": ["cfg/yolor/yolor_p6.cfg", '', "640_20", 66, 66, 4]
+     #"yolor_csp_x_star": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x_star.pt", "640_9", 66, 33, 3],
+     "yolor_p6": ["cfg/yolor/yolor_p6.cfg", "pretrained/yolor/yolor-p6.pt", "1280_12", 66, 66, 3],
+     "yolor_w6":  ["cfg/yolor/yolor_w6.cfg", "pretrained/yolor/yolor-w6.pt", "1280_12", 66, 66, 3],
+     "yolor_yolov4_p7": ["cfg/yolor/yolov4_p7.cfg", '', "1536_20", 66,66, 4]
+     #"yolor_yolov4_p6": ["cfg/yolor/yolor_p6.cfg", '', "640_12", 66, 66, 4],
+     #"yolor_yolov4_p7": ["cfg/yolor/yolor_p6.cfg", '', "640_20", 66, 66, 4]
 }
 
 yolo_config = {
-    '320_6': "9,  7,  23, 11,  21, 31,  50, 34,  93,118, 167,183",
-    '416_6': "12, 10,  31, 14,  27, 41,  64, 40, 121,152, 214,235",
-    '320_9': "9,  7,  21, 10,  20, 31,  45, 19,  48, 46,  81,106, 146,127, 107,182, 192,206",
-    '416_9': "12, 10,  27, 13,  27, 40,  58, 25,  63, 60, 105,137, 189,165, 139,236, 250,268",
-    '512_9': "14, 12,  34, 16,  33, 50,  72, 30,  77, 74, 129,169, 233,203, 171,291, 308,330",
-    '608_9': "16, 13,  39, 18,  29, 47,  85, 36,  61, 76, 137,135, 159,271, 271,254, 343,400",
-    '640_9': "17, 14,  41, 19,  30, 50,  89, 38,  64, 80, 144,142, 167,285, 285,267, 361,421",
-    '960_9': "27, 22,  63, 30,  61, 93, 135, 57, 144,138, 242,317, 437,380, 321,545, 577,618",
-    '1280_9': "36, 29,  84, 40,  82,124, 180, 75, 192,184, 323,422, 582,507, 428,726, 769,824",
-    '640_12': "15, 13,  34, 16,  24, 42,  62, 28,  53, 74, 108, 50, 120,135, 147,263, 242,202, 223,378, 324,303, 411,448",
-    '960_12': "22, 19,  51, 25,  36, 63,  91, 41,  79,111, 161, 73, 180,198, 218,389, 365,304, 330,563, 486,457, 615,673",
-    '1280_12': "29, 25,  68, 33,  48, 84, 122, 55, 105,148, 215, 97, 240,264, 290,519, 487,406, 441,751, 649,609, 820,897",
-    '1536_12': "39, 31,  89, 39,  62,102, 158, 69, 130,178, 268,119, 296,336, 357,632, 577,484, 533,898, 769,716, 968,1060",
-    "640_20": "12,  9,  15, 20,  28, 12,  31, 23,  20, 45,  55, 18,  47, 41,  36, 78,  88, 33,  65, 68, 126, 56,  83,124, 179,135, 127,231, 249,209, 179,323, 286,289, 266,437, 381,340, 454,488"
+    '320_6': "5,  8,  12, 30,  36, 14,  27, 89, 132, 40,  80,196",
+    '416_6': "7, 10,  17, 34,  91, 29,  32,100,  69,230, 236,151",
+    '320_9': "4,  6,   8, 20,  24, 10,  17, 45,  66, 23,  29, 98, 167, 52,  53,182, 143,225",
+    '416_9': "5,  7,  11, 26,  31, 13,  21, 59,  86, 30,  38,128, 217, 68,  69,237, 186,292",
+    '512_9': "7,  9,  13, 31,  38, 16,  26, 72, 106, 37,  47,157, 267, 83,  85,292, 230,359",
+    '608_9': "8, 11,  16, 37,  45, 19,  31, 86, 126, 44,  55,187, 318, 99, 101,347, 272,427",
+    '640_9': "8, 11,  17, 39,  47, 20,  33, 90, 133, 46,  58,197, 334,104, 106,365, 287,449",
+    '960_9': "13, 17,  25, 59,  71, 30,  50,135, 199, 69,  87,295, 501,156, 159,547, 430,674",
+    '1280_9': "17, 23,  33, 79,  95, 40,  66,181, 266, 92, 116,394, 668,208, 212,730, 574,899",
+    '640_12': "7, 10,  14, 32,  37, 16,  26, 67,  90, 35,  41,133, 217, 61,  89,161,  61,284, 123,398, 396,132, 305,467",
+    '960_12': "11, 15,  21, 48,  55, 25,  39,100, 135, 52,  62,199, 326, 92, 133,242,  92,425, 185,597, 593,198, 458,701",
+    '1280_12': "15, 20,  28, 64,  74, 33,  53,133, 180, 69,  82,266, 435,122, 178,323, 123,567, 246,796, 791,265, 610,934",
+    '1536_12': "18, 24,  34, 77,  89, 39,  63,160, 216, 83,  99,319, 521,147, 214,387, 147,680, 296,955, 949,317, 732,1122",
+    '1536_20': "14, 18,  23, 47,  63, 30,  37, 90,  65,119, 139, 56,  49,216,  98,187, 278, 95,  84,371, 154,287, 524,151, 129,615, 217,466, 212,914, 887,232, 384,615, 380,1158, 1108,462, 844,1179"
 }
 
 #yolotiny_config = {
@@ -58,7 +74,7 @@ classNum = len(classList)
 #    [CFG FILE, PRE-TRAINED WEIGHTS, SIZE, BATCH, DIVISION-BATCH, MASKS]
 cfgs_total = {
     "yolov3": ["cfg/yolov3/yolov3.cfg", "pretrained/yolov3/darknet53.conv.74", '608_9', 64, 32, 3],
-    "yolov3-tiny": ["cfg/yolov3/yolov3-tiny.cfg", "pretrained/yolov3/yolov3-tiny.conv.15", '416_6', 70, 2, 3],
+    "yolov3-tiny": ["cfg/yolov3/yolov3-tiny.cfg", "pretrained/yolov3/yolov3-tiny.conv.15", '416_6', 66, 2, 3],
     "yolov3-spp": ["cfg/yolov3/yolov3-spp.cfg", "pretrained/yolov3/yolov3-spp.weights", '608_9', 64, 32, 3],
     "yolov4": ["cfg/yolov4/yolov4.cfg", "pretrained/yolov4/yolov4.conv.137", '608_9', 64, 64, 3],
     "yolov4-tiny": ["cfg/yolov4/yolov4-tiny.cfg", "pretrained/yolov4/yolov4-tiny.conv.29", '416_6', 72, 1, 3],
@@ -66,23 +82,25 @@ cfgs_total = {
     "yolo-fastest-xl": ["cfg/yolo-fastest/yolo-fastest-1.1-xl.cfg", "pretrained/yolo-fastest/yolo-fastest-xl.conv.109", '320_6', 120, 2, 3],
     "yolov4x-mish": ["cfg/yolov4/yolov4x-mish.cfg", '', '640_9', 64, 64, 3],
     "yolov4-csp": ["cfg/yolov4/yolov4-csp.cfg", '', '640_9', 64, 64, 3],
-    "yolov4-p5": ["cfg/yolov4/yolov4-p5.cfg", '', '640_12', 64, 64, 4],
-    "yolov4-p6": ["cfg/yolov4/yolov4-p6.cfg", '', '640_12', 64, 64, 4],
-    "yolov5n": ["cfg/yolov5/yolov5n.yaml", "yolov5n.pt", '640_9', 128, 1, 3],
-    "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', 64, 1, 3],
-    "yolov5m": ["cfg/yolov5/yolov5m.yaml", "yolov5m.pt", '640_9', 24, 1, 3],
-    "yolov5l": ["cfg/yolov5/yolov5l.yaml", "yolov5l.pt", '640_9', 12, 1, 3],
-    "yolov5x": ["cfg/yolov5/yolov5x.yaml", "yolov5x.pt", '640_9', 8, 1, 3],
-    "yolov5s-p6": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', 48, 1, 3],
-    "yolov5m-p6": ["cfg/yolov5/yolov5m6.yaml", "yolov5m6.pt", '1280_12', 32, 1, 3],
-    "yolov5l-p6": ["cfg/yolov5/yolov5l6.yaml", "yolov5l6.pt", '1280_12', 24, 1, 3],
-    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 12, 1, 3],
-    "yolor_csp": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp.pt", "640_9", 64, 16, 3],
-    "yolor_csp_star": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp_star.pt", "640_9", 64, 16, 3],
-    "yolor_csp_x": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x.pt", "640_9", 66, 22, 3],
-    "yolor_csp_x_star": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x_star.pt", "640_9", 66, 33, 3],
-    "yolor_p6": ["cfg/yolor/yolor_p6.cfg", "pretrained/yolor/yolor_p6.pt", "1280_12", 66, 66, 3],
-    "yolor_w6":  ["cfg/yolor/yolor_w6.cfg", "pretrained/yolor/yolor_w6.pt", "1280_12", 66, 66, 3],
+    "yolov4-p5": ["cfg/yolov4/yolov4-p5.cfg", 'pretrained/yolov4-p5.conv.232', '896_12', 64, 64, 4],
+    "yolov4-p6": ["cfg/yolov4/yolov4-p6.cfg", 'pretrained/yolov4-p6.conv.289', '1280_12', 64, 64, 4],
+    "yolov5n": ["cfg/yolov5/yolov5n.yaml", "yolov5n.pt", '640_9', -1, 1, 3],
+    "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', -1, 1, 3],
+    "yolov5m": ["cfg/yolov5/yolov5m.yaml", "yolov5m.pt", '640_9', -1, 1, 3],
+    "yolov5l": ["cfg/yolov5/yolov5l.yaml", "yolov5l.pt", '640_9', -1, 1, 3],
+    "yolov5x": ["cfg/yolov5/yolov5x.yaml", "yolov5x.pt", '640_9', -1, 1, 3],
+    "yolov5s-p6_640": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '640_12', -1, 1, 3],
+    "yolov5s-p6_960": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '960_12', -1, 1, 3],
+    "yolov5s-p6": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', -1, 1, 3],
+    "yolov5m-p6": ["cfg/yolov5/yolov5m6.yaml", "yolov5m6.pt", '1280_12', -1, 1, 3],
+    "yolov5l-p6": ["cfg/yolov5/yolov5l6.yaml", "yolov5l6.pt", '1280_12', -1, 1, 3],
+    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 32, 1, 3],
+    "yolor_csp": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp.pt", "640_9", 32, 16, 3],
+    "yolor_csp_star": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp_star.pt", "640_9", 32, 16, 3],
+    "yolor_csp_x": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x.pt", "640_9", 64, 22, 3],
+    "yolor_csp_x_star": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x_star.pt", "640_9", 64, 33, 3],
+    "yolor_p6": ["cfg/yolor/yolor_p6.cfg", "pretrained/yolor/yolor_p6.pt", "1280_12", 64, 66, 3],
+    "yolor_w6":  ["cfg/yolor/yolor_w6.cfg", "pretrained/yolor/yolor_w6.pt", "1280_12", 64, 66, 3],
     "yolor_yolov4_csp":  ["cfg/yolor/yolov4_csp.cfg", '', "640_9", 66, 33, 3],
     "yolor_yolov4_csp_x":  ["cfg/yolor/yolov4_csp_x.cfg", '', "640_9", 66, 66, 3],
     "yolor_yolov4_p6": ["cfg/yolor/yolov4_p6.cfg", '', "1280_16", 66,66, 4],
@@ -171,8 +189,8 @@ for cfg_name in cfgs:
 
         cfg_file = cfg_name + '.yaml'
 
-        exec_cmd = " cd {}\n python train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --weights {}".format( \
-            yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2].split('_')[0], \
+        exec_cmd = " cd {}\n python train.py \\\n  --project {}_{} --name {}  --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --weights {}".format( \
+            yolov5_home, project_name, cfg_name, cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2].split('_')[0], \
             cfgs[cfg_name][3],cfgs[cfg_name][1])
 
 
@@ -221,7 +239,7 @@ for cfg_name in cfgs:
 
         else:
             exec_cmd = "{}/darknet detector train \\\n    {} \\\n    {} \\\n    {} \\\n    -dont_show \\\n    -mjpeg_port 8090 \\\n    -clear \\\n    -gpus 0".format(\
-                dark_home, os.path.join(cfgFolder,'obj.data'), os.path.join(cfgFolder,cfg_name+'.cfg'), os.path.join(pwd,'yolov4',cfgs[cfg_name][1]) )
+                dark_home, os.path.join(cfgFolder,'obj.data'), os.path.join(cfgFolder,cfg_name+'.cfg'), os.path.join(pwd,cfgs[cfg_name][1]) )
 
 
     file = open(os.path.join(cfgFolder, cfg_file), "w")
