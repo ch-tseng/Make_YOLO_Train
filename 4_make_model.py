@@ -193,6 +193,7 @@ for cfg_name in cfgs:
             yolov5_home, project_name, cfg_name, cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2].split('_')[0], \
             cfgs[cfg_name][3],cfgs[cfg_name][1])
 
+        exec_cmd += " --freeze 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
 
     else:
         with open(cfgs[cfg_name][0]) as file:
