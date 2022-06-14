@@ -1,6 +1,6 @@
 import os, subprocess
 
-cfgFolder = "/WORKING/WORKS/ROAD_Defects/dataset/aug_20211112/cfg_train"
+cfgFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/cfg_train"
 dark_home = "/home/chtseng/frameworks/darknet"
 sizes = [ [12,1536], [12,1280], [12,960], [12,640], [9,1280], [9,320], [9,416], [9,512], [9,608], [9,640], [9,960], [6,320], [6,416] ]
 

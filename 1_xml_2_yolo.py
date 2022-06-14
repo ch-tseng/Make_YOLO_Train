@@ -13,12 +13,12 @@ from tqdm import tqdm
 color2gry2rgb = False
 roate90 = False
 
-xmlFolder = "/WORKS/modelSale/FaceMask_Mine/aug_labels"
-imgFolder = "/WORKS/modelSale/FaceMask_Mine/aug_images"
+xmlFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/aug_labels"
+imgFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/aug_images"
 #negFolder = ""
-negFolder = "/WORKS/modelSale/FaceMask_Mine/aug_negatives"
-saveYoloPath = "/WORKS/modelSale/FaceMask_Mine/yolo/"
-classList = { "bad":0, "good":1, "none":2 }
+negFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/aug_negatives"
+saveYoloPath = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/yolo/"
+classList = { '0':0, 'eye':1, 'nose':2, 'mouth':3, 'face':4, 'head':5, 'body':6 }
 
 img_cp_type = 1  # 0--> copy, 1--> move
 
