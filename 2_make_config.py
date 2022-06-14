@@ -23,6 +23,9 @@ if not os.path.exists(saveYoloPath):
     print("There is no such folder for ", saveYoloPath)
     sys.exit()
 
+if not os.path.exists(weights_save):
+    os.makedirs(weights_save)
+
 if not os.path.exists(cfgFolder):
     os.makedirs(cfgFolder)
 
