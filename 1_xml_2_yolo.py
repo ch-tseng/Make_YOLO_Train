@@ -7,20 +7,24 @@ import cv2
 from xml.dom import minidom
 from os.path import basename
 from tqdm import tqdm
-
+#import numpy as np
+#from concurrent.futures import ThreadPoolExecutor
+#import concurrent.futures
+from libThreads import *
 #--------------------------------------------------------------------
 #augmentation
 color2gry2rgb = False
 roate90 = False
 
-xmlFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/aug_labels"
-imgFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/aug_images"
+multiThread = 10  #default = 1
+xmlFolder = "/WORKING/modelSale/like_dislike_headbody/dataset/labels"
+imgFolder = "/WORKING/modelSale/like_dislike_headbody/dataset/images"
 #negFolder = ""
-negFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/aug_negatives"
-saveYoloPath = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/yolo/"
-classList = { '0':0, 'eye':1, 'nose':2, 'mouth':3, 'face':4, 'head':5, 'body':6 }
+negFolder = "/WORKING/modelSale/like_dislike_headbody/dataset/negatives"
+saveYoloPath = "/WORKING/modelSale/like_dislike_headbody/yolo/"
+classList = { 'head':0, 'body':1, 'like':2, 'dislike':3, 'no_gesture':4 }
 
-img_cp_type = 1  # 0--> copy, 1--> move
+img_cp_type = 0  # 0--> copy, 1--> move
 
 #---------------------------------------------------------------------
 
@@ -117,44 +121,31 @@ def transferYolo( xmlFilepath, imgFilepath, newname=None):
 
     the_file.close()
 
-#---------------------------------------------------------------
-fileCount = 0
+def pos2yolo(files):
+    for file in tqdm(files):
+        filename, file_extension = os.path.splitext(file)
+        file_extension = file_extension.lower()
 
-print("[Step 1/2] Transfrt all labeled images to yolo format.")
-for file in tqdm(os.listdir(imgFolder)):
-    filename, file_extension = os.path.splitext(file)
-    file_extension = file_extension.lower()
+        if(file_extension == ".jpg" or file_extension==".png" or file_extension==".jpeg" or file_extension==".bmp"):
+            imgfile = os.path.join(imgFolder, file)
+            xmlfile = os.path.join(xmlFolder ,filename + ".xml")
 
-    if(file_extension == ".jpg" or file_extension==".png" or file_extension==".jpeg" or file_extension==".bmp"):
-        imgfile = os.path.join(imgFolder, file)
-        xmlfile = os.path.join(xmlFolder ,filename + ".xml")
+            if(os.path.isfile(xmlfile)):
+                transferYolo( xmlfile, imgfile)
+                if img_cp_type == 0:
+                    copyfile(imgfile, os.path.join(saveYoloPath ,file))
+                else:
+                    shutil.move(imgfile, os.path.join(saveYoloPath ,file))
 
-        if(os.path.isfile(xmlfile)):
-            #print("id:{}".format(fileCount))
-            #print("processing {}".format(imgfile))
-            #print("processing {}".format(xmlfile))
-            fileCount += 1
-
-            transferYolo( xmlfile, imgfile)
-            if img_cp_type == 0:
-                copyfile(imgfile, os.path.join(saveYoloPath ,file))
-            else:
-                shutil.move(imgfile, os.path.join(saveYoloPath ,file))
-
-            #if color2gry2rgb is True:
-            #    cv2.imwrite( os.path.join(saveYoloPath ,'gray_'+file), gray_3channel)
-
-print("[Step 2/2] Transfrt all negative images to yolo format.")
-nid = 0
-if(os.path.exists(negFolder)):
-    for file in tqdm(os.listdir(negFolder)):
+def neg2yolo(files):
+    for file in tqdm(files):
         filename, file_extension = os.path.splitext(file)
         file_extension = file_extension.lower()
         imgfile = os.path.join(negFolder ,file)
 
         if(file_extension == ".jpg" or file_extension==".png" or file_extension==".jpeg" or file_extension==".bmp"):
-            nid += 1
-            nfilename = 'neg_' + str(nid).zfill(6)
+            nid  = time.time()
+            nfilename = 'neg_' + str(nid)
 
             if color2gry2rgb is True:
                 img = cv2.imread(imgfile)
@@ -172,3 +163,15 @@ if(os.path.exists(negFolder)):
                 shutil.move(imgfile, os.path.join(saveYoloPath ,nfilename + file_extension))
 
 
+#---------------------------------------------------------------
+fileCount = 0
+'''
+print("[Step 1/2] Transfrt all labeled images to yolo format.")
+allfiles = os.listdir(imgFolder)
+run_jobs(allfiles, multiThread, pos2yolo, debug=False)
+'''
+print("[Step 2/2] Transfrt all negative images to yolo format.")
+if(os.path.exists(negFolder)):
+    allfiles = os.listdir(negFolder)
+    print('neg len', len(allfiles))
+    run_jobs(allfiles, multiThread, neg2yolo, debug=False)

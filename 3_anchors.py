@@ -1,6 +1,7 @@
 import os, subprocess
 
-cfgFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/cfg_train"
+project_name = "like_dislike"
+cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
 dark_home = "/home/chtseng/frameworks/darknet"
 sizes = [ [12,1536], [12,1280], [12,960], [12,640], [9,1280], [9,320], [9,416], [9,512], [9,608], [9,640], [9,960], [6,320], [6,416] ]
 

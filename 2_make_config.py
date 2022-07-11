@@ -5,13 +5,13 @@ from tqdm import tqdm
 
 #---------------------------------------------------------
 testRatio = 0.2
-project_name = "face_eyeballs"
-weights_save = "/WORKING/modelSale/face_eyeballs/weights/"
+project_name = "like_dislike"
+saveYoloPath = "/WORKING/modelSale/like_dislike_headbody/yolo/"
+classList = { 'head':0, 'body':1, 'like':2, 'dislike':3, 'no_gesture':4 }
 
-saveYoloPath = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/yolo/"
-classList = { '0':0, 'eye':1, 'nose':2, 'mouth':3, 'face':4, 'head':5, 'body':6 }
+cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
+weights_save = "/data/ai_models/training/{}/weights/".format(project_name)
 
-cfgFolder = "/WORKING/modelSale/face_mask_eyeball/aug_20220613/cfg_train"
 darknet_home = "/home/chtseng/frameworks/darknet/"
 #--------------------------------------------------------
 
@@ -68,9 +68,9 @@ cfg_obj_names = "obj.names"
 cfg_obj_data = "obj.data"
 classes = len(classList)
 
-pathCFG = os.path.join(cfgFolder, "weights")
-if not os.path.exists(pathCFG):
-    os.makedirs(pathCFG)
+#pathCFG = os.path.join(cfgFolder, "weights")
+#if not os.path.exists(pathCFG):
+#    os.makedirs(pathCFG)
 
 path_weights_save = os.path.join( weights_save, project_name, 'darknet' )
 if not os.path.exists(path_weights_save):
