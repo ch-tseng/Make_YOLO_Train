@@ -1,0 +1,9 @@
+train: {TRAIN_LIST}
+val: {TEST_LIST}
+
+# number of classes
+nc: {CLASSES}
+
+# class names
+names: {CLASS_LIST}
+
