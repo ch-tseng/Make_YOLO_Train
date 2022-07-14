@@ -5,9 +5,9 @@ from tqdm import tqdm
 
 #---------------------------------------------------------
 testRatio = 0.2
-project_name = "like_dislike"
-saveYoloPath = "/WORKING/modelSale/like_dislike_headbody/yolo/"
-classList = { 'head':0, 'body':1, 'like':2, 'dislike':3, 'no_gesture':4 }
+project_name = "M2022_CrowdedHuman"
+saveYoloPath = "/WORKS/WORKING/M2022/CrowdedHuman/aug_20220713/yolo/"
+classList = { "person_head":0, "person_vbox":1 }
 
 cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
 weights_save = "/data/ai_models/training/{}/weights/".format(project_name)

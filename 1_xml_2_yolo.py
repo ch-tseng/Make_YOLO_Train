@@ -17,12 +17,12 @@ color2gry2rgb = False
 roate90 = False
 
 multiThread = 10  #default = 1
-xmlFolder = "/WORKING/modelSale/like_dislike_headbody/dataset/labels"
-imgFolder = "/WORKING/modelSale/like_dislike_headbody/dataset/images"
+xmlFolder = "/WORKS/WORKING/M2022/CrowdedHuman/aug_20220713/aug_labels"
+imgFolder = "/WORKS/WORKING/M2022/CrowdedHuman/aug_20220713/aug_images"
 #negFolder = ""
-negFolder = "/WORKING/modelSale/like_dislike_headbody/dataset/negatives"
-saveYoloPath = "/WORKING/modelSale/like_dislike_headbody/yolo/"
-classList = { 'head':0, 'body':1, 'like':2, 'dislike':3, 'no_gesture':4 }
+negFolder = "/WORKS/WORKING/M2022/CrowdedHuman/aug_20220713/aug_negatives"
+saveYoloPath = "/WORKS/WORKING/M2022/CrowdedHuman/aug_20220713/yolo/"
+classList = { "person_head":0, "person_vbox":1 }
 
 img_cp_type = 0  # 0--> copy, 1--> move
 
@@ -165,11 +165,11 @@ def neg2yolo(files):
 
 #---------------------------------------------------------------
 fileCount = 0
-'''
+
 print("[Step 1/2] Transfrt all labeled images to yolo format.")
 allfiles = os.listdir(imgFolder)
 run_jobs(allfiles, multiThread, pos2yolo, debug=False)
-'''
+
 print("[Step 2/2] Transfrt all negative images to yolo format.")
 if(os.path.exists(negFolder)):
     allfiles = os.listdir(negFolder)

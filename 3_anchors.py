@@ -1,9 +1,9 @@
 import os, subprocess
 
-project_name = "like_dislike"
+project_name = "M2022_CrowdedHuman"
 cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
 dark_home = "/home/chtseng/frameworks/darknet"
-sizes = [ [12,1536], [12,1280], [12,960], [12,640], [9,1280], [9,320], [9,416], [9,512], [9,608], [9,640], [9,960], [6,320], [6,416] ]
+sizes = [ [12,1280], [9,640], [9,608], [6,640], [6,416], [6,320] ]
 
 darknet_path = os.path.join(dark_home, 'darknet')
 cmd_file = os.path.join(cfgFolder, 'anchors.txt')
