@@ -23,12 +23,12 @@ yolor_home = "/home/chtseng/frameworks/yolor"
 current_path = os.getcwd()
 
 cfgs = {
-    "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), os.path.join(current_path, 'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
-    "yolov7x": [os.path.join(current_path,"cfg/yolov7/yolov7x.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
-    "yolov7w6": [os.path.join(current_path,"cfg/yolov7/yolov7w6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
-    "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.tiny.yaml'), '640_9', 32, 1, 3],
-    "yolov7e6": [os.path.join(current_path,"cfg/yolov7/yolov7e6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
-    "yolov7d6": [os.path.join(current_path,"cfg/yolov7/yolov7d6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
+    "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 32, 8, 3],
+    "yolov7x": [os.path.join(current_path,"cfg/yolov7/yolov7x.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 32, 8, 3],
+    "yolov7w6": [os.path.join(current_path,"cfg/yolov7/yolov7w6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 12, 8, 4],
+    "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), 'data/hyp.scratch.tiny.yaml', '640_9', 32, 1, 3],
+    "yolov7e6": [os.path.join(current_path,"cfg/yolov7/yolov7e6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 6, 8, 4],
+    "yolov7d6": [os.path.join(current_path,"cfg/yolov7/yolov7d6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 5, 8, 4],
     "yolov4": ["cfg/yolov4/yolov4.cfg", "pretrained/yolov4/yolov4.conv.137", '608_9', 64, 64, 3],
     "yolov4-tiny": ["cfg/yolov4/yolov4-tiny.cfg", "pretrained/yolov4/yolov4-tiny.conv.29", '416_6', 72, 1, 3],
     "yolo-fastest": ["cfg/yolo-fastest/yolo-fastest-1.1.cfg", "pretrained/yolo-fastest/yolo-fastest.conv.109", '320_6', 160, 2, 3],
@@ -214,8 +214,8 @@ for cfg_name in cfgs:
         path_project = os.path.join( weights_save, project_name )
         path_project_name = os.path.join(path_project, cfg_name)
 
-        if cfg_name[:6] == 'yolov6':
-            exec_cmd = " cd {}\n $(which python) train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --project {} \\\n    --name {} \\\n    --device {} \\\n    --weights {}".format( \
+        if cfg_name[:6] == 'yolov5':
+            exec_cmd = " cd {}\n $(which python) train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --project {} \\\n    --name {}_ \\\n    --device {} \\\n    --weights {}".format( \
                 yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2].split('_')[0], \
                 cfgs[cfg_name][3], path_project, path_project_name, '{GPU}', cfgs[cfg_name][1])
 
@@ -225,10 +225,10 @@ for cfg_name in cfgs:
             else:
                 trainfile = 'train.py'
 
-            exec_cmd = " cd {}\n $(which python) {} \\\n   --workers {} --device {} --batch-size {} --data {} --img {} {} --cfg {} --weights '' --name {} --hyp {}".format( \
+            exec_cmd = " cd {}\n $(which python) {} \\\n   --workers {} --device {} --batch-size {}\\\n --data {}\\\n --img {} {}\\\n --cfg {}\\\n --weights '' --project {}\\\n --name {}_ \\\n --hyp {}".format( \
                 yolov7_home, trainfile, cfgs[cfg_name][4] , '{GPU}', cfgs[cfg_name][3], \
                 os.path.join(cfgFolder, 'ds_yolov7.yaml'), cfgs[cfg_name][2].split('_')[0], \
-                cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, cfg_file), cfg_name, cfgs[cfg_name][1] )
+                cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, cfg_file), path_project, cfg_name, cfgs[cfg_name][1] )
         #exec_cmd += " --freeze 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
 
     else:
