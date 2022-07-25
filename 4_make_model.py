@@ -1,7 +1,7 @@
 import os,sys
 
-project_name = "M2022_CrowdedHuman"
-classList = { "person_head":0, "person_vbox":1 }
+project_name = "M2022_Digger"
+classList = { "excavator":0, "wheel":1, "bucket":2 }
 
 cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
 weights_save = "/data/ai_models/training/{}/weights/".format(project_name)
@@ -23,8 +23,8 @@ yolor_home = "/home/chtseng/frameworks/yolor"
 current_path = os.getcwd()
 
 cfgs = {
-    "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 32, 8, 3],
-    "yolov7x": [os.path.join(current_path,"cfg/yolov7/yolov7x.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 32, 8, 3],
+    "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 12, 8, 3],
+    "yolov7x": [os.path.join(current_path,"cfg/yolov7/yolov7x.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 10, 8, 3],
     "yolov7w6": [os.path.join(current_path,"cfg/yolov7/yolov7w6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 12, 8, 4],
     "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), 'data/hyp.scratch.tiny.yaml', '640_9', 32, 1, 3],
     "yolov7e6": [os.path.join(current_path,"cfg/yolov7/yolov7e6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 6, 8, 4],
@@ -40,17 +40,17 @@ cfgs = {
 
 yolo_config = {
     '320_6': "3,  5,  11, 16,  21, 44,  88, 42,  38,108, 106,188",
-    '416_6': "5,  6,  14, 21,  27, 58, 114, 55,  49,141, 137,245",
-    '320_9': "9, 12,  18, 23,  28, 46,  51, 68,  82, 84,  60,189, 142,113, 110,231, 238,232",
-    '416_9': "11, 14,  21, 28,  42, 42,  28, 71,  63, 92, 105,110, 184,152, 103,279, 276,307",
+    '416_6': "36, 29, 111, 40,  79, 94, 143,180, 246,111, 301,320",
+    '320_9': "23, 18,  76, 23,  41, 48, 108, 50,  66, 96, 155, 84, 118,152, 248,119, 229,268",
+    '416_9': "30, 19,  47, 43, 118, 36,  71, 88, 174, 89, 112,159, 180,224, 306,142, 310,350",
     '512_9': "15, 19,  29, 37,  45, 74,  81,110, 131,134,  96,302, 227,181, 177,370, 381,371",
-    '608_9': "5,  7,  15, 21,  23, 58,  55, 36,  47,113,  72,217, 188, 99, 129,357, 326,350",
-    '640_9': "6,  7,  16, 22,  24, 53,  71, 47,  40,119,  78,178, 244,114, 112,346, 281,427",
+    '608_9': "45, 34, 145, 44,  77, 91, 205, 95, 125,183, 294,160, 225,289, 472,225, 435,509",
+    '640_9': "47, 36, 152, 47,  81, 96, 216,100, 131,192, 310,169, 236,304, 497,237, 457,536",
     '960_9': "28, 34,  50, 72,  98,102,  81,194, 179,193, 225,295, 428,344, 242,657, 643,707",
     '1280_9': "37, 47,  73, 92, 112,184, 204,274, 328,336, 241,754, 567,451, 442,925, 952,929",
     '640_12': "17, 21,  30, 39,  55, 56,  38,101,  85,105,  90,188, 149,141, 190,223, 127,417, 335,221, 236,463, 486,470",
     '960_12': "25, 31,  45, 59,  82, 85,  57,152, 128,157, 135,283, 224,212, 285,334, 191,625, 503,332, 354,695, 729,705",
-    '1280_12': "10, 12,  25, 35,  36, 90,  75, 53,  68,154, 194,114,  95,286, 222,310, 138,541, 637,250, 274,749, 613,905",
+    '1280_12': "85, 57, 136,132, 331, 80, 298,180, 184,300, 520,241, 319,466, 515,548, 888,364, 989,625, 656,994, 1045,1136",
     '1536_12': "40, 50,  71, 94, 132,135,  92,243, 204,251, 216,452, 358,339, 456,534, 306,1001, 804,532, 566,1111, 1166,1128"
 }
 
@@ -220,6 +220,10 @@ for cfg_name in cfgs:
                 cfgs[cfg_name][3], path_project, path_project_name, '{GPU}', cfgs[cfg_name][1])
 
         elif cfg_name[:6] == 'yolov7':
+            if not os.path.exists(os.path.join(cfgFolder,cfg_name)):
+                os.makedirs(os.path.join(cfgFolder,cfg_name))
+            shutil.copy(os.path.join(cfgFolder, 'ds_yolov7.yaml'), os.path.join(cfgFolder,cfg_name,'ds_yolov7.yaml'))
+
             if '6' in cfg_name:
                 trainfile = 'train_aux.py'
             else:
@@ -227,7 +231,7 @@ for cfg_name in cfgs:
 
             exec_cmd = " cd {}\n $(which python) {} \\\n   --workers {} --device {} --batch-size {}\\\n --data {}\\\n --img {} {}\\\n --cfg {}\\\n --weights '' --project {}\\\n --name {}_ \\\n --hyp {}".format( \
                 yolov7_home, trainfile, cfgs[cfg_name][4] , '{GPU}', cfgs[cfg_name][3], \
-                os.path.join(cfgFolder, 'ds_yolov7.yaml'), cfgs[cfg_name][2].split('_')[0], \
+                os.path.join(cfgFolder,cfg_name,'ds_yolov7.yaml'), cfgs[cfg_name][2].split('_')[0], \
                 cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, cfg_file), path_project, cfg_name, cfgs[cfg_name][1] )
         #exec_cmd += " --freeze 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
 
