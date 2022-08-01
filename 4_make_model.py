@@ -131,28 +131,6 @@ file = open(os.path.join(cfgFolder, 'ds_yolov5.yaml'), "w")
 file.write(dataset_content)
 file.close
 
-#make dataset yaml for YOLOV7
-with open('cfg/data_yolov7.yaml') as file:
-    dataset_content = file.read()
-file.close
-
-class_txt = '['
-for i, cname in enumerate(classList):
-    class_txt += "'{}'".format(cname)
-    if i<(len(classList)-1): class_txt += ', '
-class_txt += ']'
-
-dataset_content = dataset_content.replace("{TRAIN_LIST}", os.path.join(cfgFolder,'train.txt'))
-dataset_content = dataset_content.replace("{TEST_LIST}", os.path.join(cfgFolder,'test.txt'))
-dataset_content = dataset_content.replace("{CLASSES}", str(classNum))
-dataset_content = dataset_content.replace("{CLASS_LIST}", class_txt)
-
-file = open(os.path.join(cfgFolder, 'ds_yolov7.yaml'), "w")
-file.write(dataset_content)
-file.close
-
-#---- end
-
 #make dataset yaml for YOLOR
 with open('cfg/yolor_data.yaml') as file:
     dataset_content = file.read()
@@ -217,12 +195,37 @@ for cfg_name in cfgs:
         if cfg_name[:6] == 'yolov5':
             exec_cmd = " cd {}\n $(which python) train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --project {} \\\n    --name {}_ \\\n    --device {} \\\n    --weights {}".format( \
                 yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2].split('_')[0], \
-                cfgs[cfg_name][3], path_project, path_project_name, '{GPU}', cfgs[cfg_name][1])
+                cfgs[cfg_name][3], weights_save, path_project_name, '{GPU}', cfgs[cfg_name][1])
 
         elif cfg_name[:6] == 'yolov7':
-            if not os.path.exists(os.path.join(cfgFolder,cfg_name)):
-                os.makedirs(os.path.join(cfgFolder,cfg_name))
-            shutil.copy(os.path.join(cfgFolder, 'ds_yolov7.yaml'), os.path.join(cfgFolder,cfg_name,'ds_yolov7.yaml'))
+            yolov7_ds_path = os.path.join(cfgFolder, cfg_name)
+            if not os.path.exists(yolov7_ds_path):
+                os.makedirs(yolov7_ds_path)
+
+            #make dataset yaml for YOLOV7
+            with open('cfg/data_yolov7.yaml') as file:
+                dataset_content = file.read()
+            file.close
+
+            class_txt = '['
+            for i, cname in enumerate(classList):
+                class_txt += "'{}'".format(cname)
+                if i<(len(classList)-1): class_txt += ', '
+            class_txt += ']'
+
+            dataset_content = dataset_content.replace("{TRAIN_LIST}", os.path.join(yolov7_ds_path,'train.txt'))
+            dataset_content = dataset_content.replace("{TEST_LIST}", os.path.join(yolov7_ds_path,'test.txt'))
+            dataset_content = dataset_content.replace("{CLASSES}", str(classNum))
+            dataset_content = dataset_content.replace("{CLASS_LIST}", class_txt)
+
+            file = open(os.path.join(yolov7_ds_path, 'ds_yolov7.yaml'), "w")
+            file.write(dataset_content)
+            file.close
+
+            shutil.copy(os.path.join(cfgFolder,'train.txt'), os.path.join(yolov7_ds_path,'train.txt'))
+            shutil.copy(os.path.join(cfgFolder,'test.txt'), os.path.join(yolov7_ds_path,'test.txt'))
+            #---- end
+
 
             if '6' in cfg_name:
                 trainfile = 'train_aux.py'
@@ -231,8 +234,8 @@ for cfg_name in cfgs:
 
             exec_cmd = " cd {}\n $(which python) {} \\\n   --workers {} --device {} --batch-size {}\\\n --data {}\\\n --img {} {}\\\n --cfg {}\\\n --weights '' --project {}\\\n --name {}_ \\\n --hyp {}".format( \
                 yolov7_home, trainfile, cfgs[cfg_name][4] , '{GPU}', cfgs[cfg_name][3], \
-                os.path.join(cfgFolder,cfg_name,'ds_yolov7.yaml'), cfgs[cfg_name][2].split('_')[0], \
-                cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, cfg_file), path_project, cfg_name, cfgs[cfg_name][1] )
+                os.path.join(yolov7_ds_path,'ds_yolov7.yaml'), cfgs[cfg_name][2].split('_')[0], \
+                cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, cfg_file), weights_save, cfg_name, cfgs[cfg_name][1] )
         #exec_cmd += " --freeze 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
 
     else:
