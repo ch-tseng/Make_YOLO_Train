@@ -5,12 +5,12 @@ from tqdm import tqdm
 
 #---------------------------------------------------------
 testRatio = 0.2
-project_name = "M2022_CrowdedHuman"
-saveYoloPath = "/WORKS/WORKING/M2022/CrowdedHuman/aug_20220713/yolo/"
-classList = { "person_head":0, "person_vbox":1 }
+project_name = "Digger"
+saveYoloPath = "/WORKING/M2022/Digger/aug_20220722/yolo/"
+classList = { "excavator":0, "wheel":1, "bucket":2 }
 
-cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
-weights_save = "/data/ai_models/training/{}/weights/".format(project_name)
+cfgFolder = "/WORKING/M2022/{}/cfg_train/".format(project_name)
+weights_save = "/WORKING/M2022/{}/weights/".format(project_name)
 
 darknet_home = "/home/chtseng/frameworks/darknet/"
 #--------------------------------------------------------

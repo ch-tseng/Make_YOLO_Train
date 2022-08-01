@@ -1,12 +1,11 @@
 import shutil
 import os,sys
 
-project_name = "M2022_Digger"
+project_name = "Digger"
 classList = { "excavator":0, "wheel":1, "bucket":2 }
 
-cfgFolder = "/data/ai_models/training/{}/cfg_train/".format(project_name)
-weights_save = "/data/ai_models/training/{}/weights/".format(project_name)
-
+cfgFolder = "/WORKING/M2022/{}/cfg_train/".format(project_name)
+weights_save = "/WORKING/M2022/{}/weights/".format(project_name)
 '''
 classList = { 'D00':0, 'D10':1, 'D20':2, 'D21':3, 'D30':4 ,'D31':5, 'D40':6, 'D41':7, 'D42':8, 'D99':9 }
 cfgFolder = "/WORKING/WORKS/road_defects_2022_04/aug_20220408/cfg_train"
