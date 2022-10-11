@@ -1,11 +1,19 @@
 import shutil
 import os,sys
+from configparser import ConfigParser
+import ast
 
-project_name = "Digger"
-classList = { "excavator":0, "wheel":1, "bucket":2 }
+cfg = ConfigParser()
+cfg.read("config.ini",encoding="utf-8")
 
-cfgFolder = "/WORKING/M2022/{}/cfg_train/".format(project_name)
-weights_save = "/WORKING/M2022/{}/weights/".format(project_name)
+project_name = cfg.get("global", "project_name")
+baseFolder = cfg.get("global", "baseFolder")
+classList = ast.literal_eval(cfg.get("global", "classList"))
+yolo_config = ast.literal_eval(cfg.get("models", "yolo_anchors"))
+
+cfgFolder = os.path.join(baseFolder, project_name, "cfg_train")
+weights_save = os.path.join(baseFolder, project_name, "weights")
+
 '''
 classList = { 'D00':0, 'D10':1, 'D20':2, 'D21':3, 'D30':4 ,'D31':5, 'D40':6, 'D41':7, 'D42':8, 'D99':9 }
 cfgFolder = "/WORKING/WORKS/road_defects_2022_04/aug_20220408/cfg_train"
@@ -15,49 +23,32 @@ classList = { "balaclava_ski_mask":0, "eyeglasses":1, "face_no_mask":2, "face_ot
               "helmet":11, "hijab_niqab":12, "hood":13, "mask_colorful":14, "mask_surgical":15, "other":16, \
               "scarf_bandana":17, "sunglasses":18, "turban":19 }
 '''
-dark_home = "/home/chtseng/frameworks/darknet"
-yolofastest_home = "/home/chtseng/frameworks/darknet"
-yolov5_home = "/data/ai_models/frameworks/yolov5"
-yolov7_home = "/data/ai_models/frameworks/yolov7"
-yolor_home = "/home/chtseng/frameworks/yolor"
+
+dark_home = cfg.get("yoloPath", "yolov4_home")
+yolofastest_home = cfg.get("yoloPath", "yolofastest_home")
+yolov5_home = cfg.get("yoloPath", "yolov5_home")
+yolov7_home = cfg.get("yoloPath", "yolov7_home")
+yolor_home = cfg.get("yoloPath", "yolor_home")
 current_path = os.getcwd()
 
+baseFolder = baseFolder.replace("\\", '/')
+dark_home = dark_home.replace("\\", '/')
+yolofastest_home = yolofastest_home.replace("\\", '/')
+yolov5_home = yolov5_home.replace("\\", '/')
+yolov7_home = yolov7_home.replace("\\", '/')
+yolor_home = yolor_home.replace("\\", '/')
+cfgFolder = cfgFolder.replace("\\", '/')
+weights_save = weights_save.replace("\\", '/')
+
 cfgs = {
-    "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 12, 8, 3],
-    "yolov7x": [os.path.join(current_path,"cfg/yolov7/yolov7x.yaml"), 'data/hyp.scratch.p5.yaml', '640_9', 10, 8, 3],
-    "yolov7w6": [os.path.join(current_path,"cfg/yolov7/yolov7w6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 12, 8, 4],
-    "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), 'data/hyp.scratch.tiny.yaml', '640_9', 32, 1, 3],
-    "yolov7e6": [os.path.join(current_path,"cfg/yolov7/yolov7e6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 6, 8, 4],
-    "yolov7d6": [os.path.join(current_path,"cfg/yolov7/yolov7d6.yaml"), 'data/hyp.scratch.p6.yaml', '1280_12', 5, 8, 4],
+    "yolov3": ["cfg/yolov3/yolov3.cfg", "pretrained/yolov3/darknet53.conv.74", '608_9', 64, 32, 3],
+    "yolov3-tiny": ["cfg/yolov3/yolov3-tiny.cfg", "pretrained/yolov3/yolov3-tiny.conv.15", '416_6', 66, 2, 3],
     "yolov4": ["cfg/yolov4/yolov4.cfg", "pretrained/yolov4/yolov4.conv.137", '608_9', 64, 64, 3],
     "yolov4-tiny": ["cfg/yolov4/yolov4-tiny.cfg", "pretrained/yolov4/yolov4-tiny.conv.29", '416_6', 72, 1, 3],
-    "yolo-fastest": ["cfg/yolo-fastest/yolo-fastest-1.1.cfg", "pretrained/yolo-fastest/yolo-fastest.conv.109", '320_6', 160, 2, 3],
-    "yolo-fastest-xl": ["cfg/yolo-fastest/yolo-fastest-1.1-xl.cfg", "pretrained/yolo-fastest/yolo-fastest-xl.conv.109", '320_6', 120, 2, 3],
-    "yolov5n": ["cfg/yolov5/yolov5n.yaml", "yolov5n.pt", '640_9', 128, 1, 3],
     "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', 64, 1, 3],
-    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 12, 1, 3],
+    "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), os.path.join(current_path, 'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
+    "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.tiny.yaml'), '640_9', 32, 1, 3]
 }
-
-yolo_config = {
-    '320_6': "3,  5,  11, 16,  21, 44,  88, 42,  38,108, 106,188",
-    '416_6': "36, 29, 111, 40,  79, 94, 143,180, 246,111, 301,320",
-    '320_9': "23, 18,  76, 23,  41, 48, 108, 50,  66, 96, 155, 84, 118,152, 248,119, 229,268",
-    '416_9': "30, 19,  47, 43, 118, 36,  71, 88, 174, 89, 112,159, 180,224, 306,142, 310,350",
-    '512_9': "15, 19,  29, 37,  45, 74,  81,110, 131,134,  96,302, 227,181, 177,370, 381,371",
-    '608_9': "45, 34, 145, 44,  77, 91, 205, 95, 125,183, 294,160, 225,289, 472,225, 435,509",
-    '640_9': "47, 36, 152, 47,  81, 96, 216,100, 131,192, 310,169, 236,304, 497,237, 457,536",
-    '960_9': "28, 34,  50, 72,  98,102,  81,194, 179,193, 225,295, 428,344, 242,657, 643,707",
-    '1280_9': "37, 47,  73, 92, 112,184, 204,274, 328,336, 241,754, 567,451, 442,925, 952,929",
-    '640_12': "17, 21,  30, 39,  55, 56,  38,101,  85,105,  90,188, 149,141, 190,223, 127,417, 335,221, 236,463, 486,470",
-    '960_12': "25, 31,  45, 59,  82, 85,  57,152, 128,157, 135,283, 224,212, 285,334, 191,625, 503,332, 354,695, 729,705",
-    '1280_12': "85, 57, 136,132, 331, 80, 298,180, 184,300, 520,241, 319,466, 515,548, 888,364, 989,625, 656,994, 1045,1136",
-    '1536_12': "40, 50,  71, 94, 132,135,  92,243, 204,251, 216,452, 358,339, 456,534, 306,1001, 804,532, 566,1111, 1166,1128"
-}
-
-#yolotiny_config = {
-#    '320': "7, 17,  11, 23,  20, 37,  53, 39,  85, 48, 170,105",
-#    '416': "9, 22,  15, 30,  27, 48,  68, 51, 110, 62, 221,137",
-#}
 
 #---------------------------------------------------------------------
 

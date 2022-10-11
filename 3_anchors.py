@@ -1,9 +1,19 @@
 import os, subprocess
+from configparser import ConfigParser
+import ast
 
-project_name = "Digger"
-cfgFolder = "/WORKING/M2022/{}/cfg_train/".format(project_name)
-dark_home = "/home/chtseng/frameworks/darknet"
-sizes = [ [12,1280], [9,640], [9,608], [9,416], [9,320] ]
+cfg = ConfigParser()
+cfg.read("config.ini",encoding="utf-8")
+
+project_name = cfg.get("global", "project_name")
+baseFolder = cfg.get("global", "baseFolder")
+cfgFolder = os.path.join(baseFolder, project_name, "cfg_train")
+darknet_home = cfg.get("yoloPath", "yolov4_home")
+sizes = ast.literal_eval(cfg.get("models", "anchors"))
+#--------------------------------------------------------
+baseFolder = baseFolder.replace("\\", '/')
+dark_home = darknet_home.replace("\\", '/')
+cfgFolder = cfgFolder.replace("\\", '/')
 
 darknet_path = os.path.join(dark_home, 'darknet')
 cmd_file = os.path.join(cfgFolder, 'anchors.txt')

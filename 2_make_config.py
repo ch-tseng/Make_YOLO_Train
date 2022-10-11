@@ -2,18 +2,27 @@ import random
 import glob, os, sys
 import os.path
 from tqdm import tqdm
+from configparser import ConfigParser
+import ast
+
+cfg = ConfigParser()
+cfg.read("config.ini",encoding="utf-8")
 
 #---------------------------------------------------------
 testRatio = 0.2
-project_name = "Digger"
-saveYoloPath = "/WORKING/M2022/Digger/aug_20220722/yolo/"
-classList = { "excavator":0, "wheel":1, "bucket":2 }
+project_name = cfg.get("global", "project_name")
+classList = ast.literal_eval(cfg.get("global", "classList"))
+baseFolder = cfg.get("global", "baseFolder")
 
-cfgFolder = "/WORKING/M2022/{}/cfg_train/".format(project_name)
-weights_save = "/WORKING/M2022/{}/weights/".format(project_name)
+saveYoloPath = os.path.join(baseFolder, project_name, "yolo")
+cfgFolder = os.path.join(baseFolder, project_name, "cfg_train")
+weights_save = os.path.join(baseFolder, project_name, "weights")
 
-darknet_home = "/home/chtseng/frameworks/darknet/"
-#--------------------------------------------------------
+#----------------------------------------------------
+baseFolder = baseFolder.replace("\\", '/')
+saveYoloPath = saveYoloPath.replace("\\", '/')
+cfgFolder = cfgFolder.replace("\\", '/')
+weights_save = weights_save.replace("\\", '/')
 
 # make image list -------------------------------------
 fileList = []
