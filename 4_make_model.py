@@ -39,17 +39,20 @@ yolov7_home = yolov7_home.replace("\\", '/')
 yolor_home = yolor_home.replace("\\", '/')
 cfgFolder = cfgFolder.replace("\\", '/')
 weights_save = weights_save.replace("\\", '/')
+train_models =  ast.literal_eval(cfg.get("models", "train_models"))
 
+'''
 cfgs = {
     "yolov3": ["cfg/yolov3/yolov3.cfg", "pretrained/yolov3/darknet53.conv.74", '608_9', 64, 32, 3],
     "yolov3-tiny": ["cfg/yolov3/yolov3-tiny.cfg", "pretrained/yolov3/yolov3-tiny.conv.15", '416_6', 66, 2, 3],
     "yolov4": ["cfg/yolov4/yolov4.cfg", "pretrained/yolov4/yolov4.conv.137", '608_9', 64, 64, 3],
     "yolov4-tiny": ["cfg/yolov4/yolov4-tiny.cfg", "pretrained/yolov4/yolov4-tiny.conv.29", '416_6', 72, 1, 3],
     "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', 64, 1, 3],
+    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 12, 1, 3],
     "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), os.path.join(current_path, 'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
     "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.tiny.yaml'), '640_9', 32, 1, 3]
 }
-
+'''
 #---------------------------------------------------------------------
 
 classNum = len(classList)
@@ -77,17 +80,17 @@ cfgs_total = {
     "yolov4-csp": ["cfg/yolov4/yolov4-csp.cfg", '', '640_9', 64, 64, 3],
     "yolov4-p5": ["cfg/yolov4/yolov4-p5.cfg", 'pretrained/yolov4-p5.conv.232', '896_12', 64, 64, 4],
     "yolov4-p6": ["cfg/yolov4/yolov4-p6.cfg", 'pretrained/yolov4-p6.conv.289', '1280_12', 64, 64, 4],
-    "yolov5n": ["cfg/yolov5/yolov5n.yaml", "yolov5n.pt", '640_9', 128, 1, 3],
-    "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', 64, 1, 3],
-    "yolov5m": ["cfg/yolov5/yolov5m.yaml", "yolov5m.pt", '640_9', 24, 1, 3],
-    "yolov5l": ["cfg/yolov5/yolov5l.yaml", "yolov5l.pt", '640_9', 12, 1, 3],
-    "yolov5x": ["cfg/yolov5/yolov5x.yaml", "yolov5x.pt", '640_9', 8, 1, 3],
-    "yolov5s-p6_640": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '640_12', 48, 1, 3],
-    "yolov5s-p6_960": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '960_12', 48, 1, 3],
-    "yolov5s-p6": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', 48, 1, 3],
-    "yolov5m-p6": ["cfg/yolov5/yolov5m6.yaml", "yolov5m6.pt", '1280_12', 32, 1, 3],
-    "yolov5l-p6": ["cfg/yolov5/yolov5l6.yaml", "yolov5l6.pt", '1280_12', 24, 1, 3],
-    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 12, 1, 3],
+    "yolov5n": ["cfg/yolov5/yolov5n.yaml", "yolov5n.pt", '640_9', -1, 1, 3],
+    "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', -1, 1, 3],
+    "yolov5m": ["cfg/yolov5/yolov5m.yaml", "yolov5m.pt", '640_9', -1, 1, 3],
+    "yolov5l": ["cfg/yolov5/yolov5l.yaml", "yolov5l.pt", '640_9', -1, 1, 3],
+    "yolov5x": ["cfg/yolov5/yolov5x.yaml", "yolov5x.pt", '640_9', -1, 1, 3],
+    "yolov5s-p6_640": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '640_12', -1, 1, 3],
+    "yolov5s-p6_960": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '960_12', -1, 1, 3],
+    "yolov5s-p6": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', -1, 1, 3],
+    "yolov5m-p6": ["cfg/yolov5/yolov5m6.yaml", "yolov5m6.pt", '1280_12', -1, 1, 3],
+    "yolov5l-p6": ["cfg/yolov5/yolov5l6.yaml", "yolov5l6.pt", '1280_12', -1, 1, 3],
+    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', -1, 1, 3],
     "yolor_csp": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp.pt", "640_9", 64, 16, 3],
     "yolor_csp_star": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp_star.pt", "640_9", 64, 16, 3],
     "yolor_csp_x": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x.pt", "640_9", 66, 22, 3],
@@ -97,8 +100,17 @@ cfgs_total = {
     "yolor_yolov4_csp":  ["cfg/yolor/yolov4_csp.cfg", '', "640_9", 66, 33, 3],
     "yolor_yolov4_csp_x":  ["cfg/yolor/yolov4_csp_x.cfg", '', "640_9", 66, 66, 3],
     "yolor_yolov4_p6": ["cfg/yolor/yolov4_p6.cfg", '', "1280_16", 66,66, 4],
-    "yolor_yolov4_p7": ["cfg/yolor/yolov4_p7.cfg", '', "1536_20", 66,66, 4]
+    "yolor_yolov4_p7": ["cfg/yolor/yolov4_p7.cfg", '', "1536_20", 66,66, 4],
+    "sparse_yolov5n": ["cfg/yolov5/yolov5n.yaml", 'zoo:cv/detection/yolov5-n/pytorch/ultralytics/coco/base-none?recipe_type=transfer', '640_9', 1,1,1],
+    "sparse_yolov5s": ["cfg/yolov5/yolov5s.yaml", 'zoo:cv/detection/yolov5-s/pytorch/ultralytics/coco/pruned_quant-aggressive_94?recipe_type=transfer', '640_9', 1,1,1],
+    "sparse_yolov5l": ["cfg/yolov5/yolov5l.yaml", 'zoo:cv/detection/yolov5-l/pytorch/ultralytics/coco/pruned_quant-aggressive_95?recipe_type=transfer', '640_9', 1,1,1]
 }
+
+cfgs = {}
+for m in train_models:
+    if m in cfgs_total:
+        cfgs.update( { m:cfgs_total[m] } )
+
 
 pwd = os.getcwd()
 
@@ -147,7 +159,9 @@ file.close
 tfile = open( os.path.join(cfgFolder, 'train_cmd.txt'), 'w')
 
 for cfg_name in cfgs:
-    if(cfg_name[:6] in ['yolov5', 'yolov7'] ):
+
+
+    if ('yolov5' in cfg_name) or ('yolov6' in cfg_name):
         anchors = yolo_config[cfgs[cfg_name][2]]
         anch_list = anchors.split(',')
 
@@ -180,8 +194,8 @@ for cfg_name in cfgs:
             file_updated = file_updated.replace("{ANCHOR4}", str(anchors4))
 
         cfg_file = cfg_name + '.yaml'
-        path_project = os.path.join( weights_save, project_name )
-        path_project_name = os.path.join(path_project, cfg_name)
+        path_project = weights_save
+        path_project_name = os.path.join(weights_save, cfg_name)
 
         if cfg_name[:6] == 'yolov5':
             exec_cmd = " cd {}\n $(which python) train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --project {} \\\n    --name {}_ \\\n    --device {} \\\n    --weights {}".format( \
@@ -228,6 +242,14 @@ for cfg_name in cfgs:
                 os.path.join(yolov7_ds_path,'ds_yolov7.yaml'), cfgs[cfg_name][2].split('_')[0], \
                 cfgs[cfg_name][2].split('_')[0], os.path.join(cfgFolder, cfg_file), weights_save, cfg_name, cfgs[cfg_name][1] )
         #exec_cmd += " --freeze 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
+
+        #SparseML for YOLOV5
+        elif cfg_name[:14] == 'sparse_yolov5s':
+            exec_cmd = "cd {}\n sparseml.yolov5.train \\\n   --data {} --cfg {} \\\n   --weights {} \\\n   --hyp {} \\\n --recipe {}".format( \
+                       yolov5_home,
+                       os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder, cfg_file), \
+                       cfgs[cfg_name][1], \
+                       'data/hyps/hyp.scratch-high.yaml', 'zoo:cv/detection/yolov5-s/pytorch/ultralytics/coco/pruned-aggressive_96' )
 
     else:
         with open(cfgs[cfg_name][0]) as file:
