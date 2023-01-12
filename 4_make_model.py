@@ -48,7 +48,7 @@ cfgs = {
     "yolov4": ["cfg/yolov4/yolov4.cfg", "pretrained/yolov4/yolov4.conv.137", '608_9', 64, 64, 3],
     "yolov4-tiny": ["cfg/yolov4/yolov4-tiny.cfg", "pretrained/yolov4/yolov4-tiny.conv.29", '416_6', 72, 1, 3],
     "yolov5s": ["cfg/yolov5/yolov5s.yaml", "yolov5s.pt", '640_9', 64, 1, 3],
-    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 12, 1, 3],
+    "yolov5x6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', 12, 1, 3],
     "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), os.path.join(current_path, 'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
     "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.tiny.yaml'), '640_9', 32, 1, 3]
 }
@@ -62,13 +62,21 @@ classNum = len(classList)
 #    yolo-fastest-xl:320, yolov4x-mish:640, yolov4-csp:512, yolov4-cspx-p7:1536
 #    [CFG FILE, PRE-TRAINED WEIGHTS, SIZE, BATCH, DIVISION-BATCH, MASKS]
 cfgs_total = {
+    "yolov8n": ['','','640_9',-1,9,3],
+    "yolov8s": ['','','640_9',-1,9,3],
+    "yolov8m": ['','','640_9',-1,9,3],
+    "yolov8l": ['','','640_9',-1,9,3],
+    "yolov8x": ['','','640_9',-1,9,3],
     "yolov7": [os.path.join(current_path,"cfg/yolov7/yolov7.yaml"), os.path.join(current_path, 'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
     "yolov7x": [os.path.join(current_path,"cfg/yolov7/yolov7x.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p5.yaml'), '640_9', 32, 8, 3],
     "yolov7w6": [os.path.join(current_path,"cfg/yolov7/yolov7w6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
     "yolov7-tiny": [os.path.join(current_path,"cfg/yolov7/yolov7-tiny.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.tiny.yaml'), '640_9', 32, 1, 3],
     "yolov7e6": [os.path.join(current_path,"cfg/yolov7/yolov7e6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
     "yolov7e6e": [os.path.join(current_path,"cfg/yolov7/yolov7e6e.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
-    "yolov7d6": [os.path.join(current_path,"cfg/yolov7/yolov7d6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 4],
+    "yolov7d6": [os.path.join(current_path,"cfg/yolov7/yolov7d6.yaml"), os.path.join(current_path,'cfg/yolov7/hyp.scratch.p6.yaml'), '1280_12', 32, 8, 3],
+    "darknet-yolov7-tiny": [os.path.join(current_path,"cfg/darknet_yolov7/yolov7-tiny.cfg"), 'pretrained/darknet_yolov7/yolov7-tiny.conv.87', '416_9', 96, 1, 3],
+    "darknet-yolov7": [os.path.join(current_path,"cfg/darknet_yolov7/yolov7.cfg"), 'pretrained/darknet_yolov7/yolov7.weights', '640_9', 32, 8, 3],
+    "darknet-yolov7x": [os.path.join(current_path,"cfg/darknet_yolov7/yolov7x.cfg"), 'pretrained/darknet_yolov7/yolov7x.weights', '640_9', 32, 8, 3],
     "yolov3": ["cfg/yolov3/yolov3.cfg", "pretrained/yolov3/darknet53.conv.74", '608_9', 64, 32, 3],
     "yolov3-tiny": ["cfg/yolov3/yolov3-tiny.cfg", "pretrained/yolov3/yolov3-tiny.conv.15", '416_6', 66, 2, 3],
     "yolov3-spp": ["cfg/yolov3/yolov3-spp.cfg", "pretrained/yolov3/yolov3-spp.weights", '608_9', 64, 32, 3],
@@ -85,12 +93,12 @@ cfgs_total = {
     "yolov5m": ["cfg/yolov5/yolov5m.yaml", "yolov5m.pt", '640_9', -1, 1, 3],
     "yolov5l": ["cfg/yolov5/yolov5l.yaml", "yolov5l.pt", '640_9', -1, 1, 3],
     "yolov5x": ["cfg/yolov5/yolov5x.yaml", "yolov5x.pt", '640_9', -1, 1, 3],
-    "yolov5s-p6_640": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '640_12', -1, 1, 3],
-    "yolov5s-p6_960": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '960_12', -1, 1, 3],
-    "yolov5s-p6": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', -1, 1, 3],
-    "yolov5m-p6": ["cfg/yolov5/yolov5m6.yaml", "yolov5m6.pt", '1280_12', -1, 1, 3],
-    "yolov5l-p6": ["cfg/yolov5/yolov5l6.yaml", "yolov5l6.pt", '1280_12', -1, 1, 3],
-    "yolov5x-p6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', -1, 1, 3],
+    "yolov5s6_640": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '640_12', -1, 1, 3],
+    "yolov5s6_960": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '960_12', -1, 1, 3],
+    "yolov5s6": ["cfg/yolov5/yolov5s6.yaml", "yolov5s6.pt", '1280_12', -1, 1, 3],
+    "yolov5m6": ["cfg/yolov5/yolov5m6.yaml", "yolov5m6.pt", '1280_12', -1, 1, 3],
+    "yolov5l6": ["cfg/yolov5/yolov5l6.yaml", "yolov5l6.pt", '1280_12', -1, 1, 3],
+    "yolov5x6": ["cfg/yolov5/yolov5x6.yaml", "yolov5x6.pt", '1280_12', -1, 1, 3],
     "yolor_csp": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp.pt", "640_9", 64, 16, 3],
     "yolor_csp_star": ["cfg/yolor/yolor_csp.cfg", "pretrained/yolor/yolor_csp_star.pt", "640_9", 64, 16, 3],
     "yolor_csp_x": ["cfg/yolor/yolor_csp_x.cfg", "pretrained/yolor/yolor_csp_x.pt", "640_9", 66, 22, 3],
@@ -101,9 +109,9 @@ cfgs_total = {
     "yolor_yolov4_csp_x":  ["cfg/yolor/yolov4_csp_x.cfg", '', "640_9", 66, 66, 3],
     "yolor_yolov4_p6": ["cfg/yolor/yolov4_p6.cfg", '', "1280_16", 66,66, 4],
     "yolor_yolov4_p7": ["cfg/yolor/yolov4_p7.cfg", '', "1536_20", 66,66, 4],
-    "sparse_yolov5n": ["cfg/yolov5/yolov5n.yaml", 'zoo:cv/detection/yolov5-n/pytorch/ultralytics/coco/base-none?recipe_type=transfer', '640_9', 1,1,1],
-    "sparse_yolov5s": ["cfg/yolov5/yolov5s.yaml", 'zoo:cv/detection/yolov5-s/pytorch/ultralytics/coco/pruned_quant-aggressive_94?recipe_type=transfer', '640_9', 1,1,1],
-    "sparse_yolov5l": ["cfg/yolov5/yolov5l.yaml", 'zoo:cv/detection/yolov5-l/pytorch/ultralytics/coco/pruned_quant-aggressive_95?recipe_type=transfer', '640_9', 1,1,1]
+    "sparse_yolov5n": ["cfg/yolov5/yolov5n.yaml", 'zoo:cv/detection/yolov5-n/pytorch/ultralytics/coco/base-none?recipe_type=transfer', '640_9', 300,1,1],
+    "sparse_yolov5s": ["cfg/yolov5/yolov5s.yaml", 'zoo:cv/detection/yolov5-s/pytorch/ultralytics/coco/pruned_quant-aggressive_94?recipe_type=transfer', '640_9', 300,1,1],
+    "sparse_yolov5l": ["cfg/yolov5/yolov5l.yaml", 'zoo:cv/detection/yolov5-l/pytorch/ultralytics/coco/pruned_quant-aggressive_95?recipe_type=transfer', '640_9', 300,1,1]
 }
 
 cfgs = {}
@@ -161,7 +169,9 @@ tfile = open( os.path.join(cfgFolder, 'train_cmd.txt'), 'w')
 for cfg_name in cfgs:
 
 
-    if ('yolov5' in cfg_name) or ('yolov6' in cfg_name):
+    if ('yolov5' in cfg_name) or ('yolov6' in cfg_name) or ('yolov8' in cfg_name) \
+            or (('yolov7' in cfg_name) and ('darknet' not in cfg_name)):
+
         anchors = yolo_config[cfgs[cfg_name][2]]
         anch_list = anchors.split(',')
 
@@ -180,27 +190,32 @@ for cfg_name in cfgs:
                 anchors4 += anch_list[a]
                 if a<24: anchors4 += ','
 
-        with open(cfgs[cfg_name][0]) as file:
-            file_content = file.read()
-        file.close
+        if not 'yolov8' in cfg_name:
+            with open(cfgs[cfg_name][0]) as file:
+                file_content = file.read()
+            file.close
 
-        #file_content = open( cfgs[cfg_name][0], 'w')
+            #file_content = open( cfgs[cfg_name][0], 'w')
 
-        file_updated = file_content.replace("{CLASSES}", str(classNum))
-        file_updated = file_updated.replace("{ANCHOR1}", str(anchors1))
-        file_updated = file_updated.replace("{ANCHOR2}", str(anchors2))
-        file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
-        if len(anch_list) >= 18:
-            file_updated = file_updated.replace("{ANCHOR4}", str(anchors4))
+            file_updated = file_content.replace("{CLASSES}", str(classNum))
+            file_updated = file_updated.replace("{ANCHOR1}", str(anchors1))
+            file_updated = file_updated.replace("{ANCHOR2}", str(anchors2))
+            file_updated = file_updated.replace("{ANCHOR3}", str(anchors3))
+            if len(anch_list) >= 18:
+                file_updated = file_updated.replace("{ANCHOR4}", str(anchors4))
 
-        cfg_file = cfg_name + '.yaml'
-        path_project = weights_save
-        path_project_name = os.path.join(weights_save, cfg_name)
+            cfg_file = cfg_name + '.yaml'
+            path_project = weights_save
+            path_project_name = os.path.join(weights_save, cfg_name)
 
         if cfg_name[:6] == 'yolov5':
             exec_cmd = " cd {}\n $(which python) train.py \\\n    --data {} \\\n    --imgsz {} \\\n    --batch {} \\\n    --epochs 300 \\\n    --project {} \\\n    --name {}_ \\\n    --device {} \\\n    --weights {}".format( \
                 yolov5_home, os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfgs[cfg_name][2].split('_')[0], \
                 cfgs[cfg_name][3], weights_save, path_project_name, '{GPU}', cfgs[cfg_name][1])
+
+        elif cfg_name[:6] == 'yolov8':
+            exec_cmd = " cd {}\n yolo task=detect mode=train data={} model={}.pt batch={} epochs=100 imgsz={} device={} workers=4".format( \
+                       weights_save, os.path.join(cfgFolder, 'ds_yolov5.yaml'), cfg_name, cfgs[cfg_name][3], cfgs[cfg_name][2].split('_')[0], '{GPU}')
 
         elif cfg_name[:6] == 'yolov7':
             yolov7_ds_path = os.path.join(cfgFolder, cfg_name)
@@ -245,8 +260,8 @@ for cfg_name in cfgs:
 
         #SparseML for YOLOV5
         elif cfg_name[:14] == 'sparse_yolov5s':
-            exec_cmd = "cd {}\n sparseml.yolov5.train \\\n   --data {} --cfg {} \\\n   --weights {} \\\n   --hyp {} \\\n --recipe {}".format( \
-                       yolov5_home,
+            exec_cmd = "cd {}\n sparseml.yolov5.train \\\n   --epochs {} \\\n   --project {} \\\n   --name {}_ \\\n   --data {} --cfg {} \\\n   --weights {} \\\n   --hyp {} \\\n --recipe {}".format( \
+                       yolov5_home, cfgs[cfg_name][3], weights_save, cfg_name,
                        os.path.join(cfgFolder, 'ds_yolov5.yaml'), os.path.join(cfgFolder, cfg_file), \
                        cfgs[cfg_name][1], \
                        'data/hyps/hyp.scratch-high.yaml', 'zoo:cv/detection/yolov5-s/pytorch/ultralytics/coco/pruned-aggressive_96' )
@@ -298,10 +313,10 @@ for cfg_name in cfgs:
             exec_cmd = "{}/darknet detector train \\\n    {} \\\n    {} \\\n    {} \\\n    -dont_show \\\n    -mjpeg_port {} \\\n    -clear \\\n    -gpus {}".format(\
                 dark_home, os.path.join(cfgFolder,'obj.data'), os.path.join(cfgFolder,cfg_name+'.cfg'), os.path.join(pwd,cfgs[cfg_name][1]), '{DARKNET_PORT}', '{GPU}' )
 
-
-    file = open(os.path.join(cfgFolder, cfg_file), "w")
-    file.write(file_updated)
-    file.close
+    if not cfg_name[:6] == 'yolov8':
+        file = open(os.path.join(cfgFolder, cfg_file), "w")
+        file.write(file_updated)
+        file.close
 
 
     print("-----------------------------------------")
