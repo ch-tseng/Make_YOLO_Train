@@ -140,10 +140,18 @@ def pos2yolo(files):
 
             if(os.path.isfile(xmlfile)):
                 transferYolo( xmlfile, imgfile)
-                if img_cp_type == 0:
-                    copyfile(imgfile, os.path.join(saveYoloPath ,file))
-                else:
-                    shutil.move(imgfile, os.path.join(saveYoloPath ,file))
+                try:
+                    img = cv2.imread(imgfile)
+                    test = img.shape
+                except:
+                    print('cannot read', imgfile)
+                    return
+
+                cv2.imwrite(os.path.join(saveYoloPath ,file), img)
+
+                if img_cp_type == 1:
+                    #shutil.move(imgfile, os.path.join(saveYoloPath ,file))
+                    os.remove(imgfile)
 
 def neg2yolo(files):
     for file in tqdm(files):
@@ -153,7 +161,7 @@ def neg2yolo(files):
 
         if(file_extension == ".jpg" or file_extension==".png" or file_extension==".jpeg" or file_extension==".bmp"):
             nid  = time.time()
-            nfilename = 'neg_' + str(nid)
+            nfilename = 'neg_' + str(nid).replace(".","")
 
             if color2gry2rgb is True:
                 img = cv2.imread(imgfile)
